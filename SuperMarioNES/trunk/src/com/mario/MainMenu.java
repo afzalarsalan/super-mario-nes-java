@@ -48,9 +48,9 @@ public class MainMenu {
 
     private void initializeFonts(){
         try {
-            Font customfont = Font.createFont(Font.TRUETYPE_FONT,MainMenu.class.getResourceAsStream("fonts/prstart.ttf")).deriveFont(24f);
+            Font customfont = Font.createFont(Font.TRUETYPE_FONT,MainMenu.class.getResourceAsStream("/com/mario/fonts/prstart.ttf")).deriveFont(24f);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT,MainMenu.class.getResourceAsStream("fonts/prstart.ttf")));
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT,MainMenu.class.getResourceAsStream("/com/mario/fonts/prstart.ttf")));
             marioFont = customfont;
 
         } catch (FontFormatException e) {
