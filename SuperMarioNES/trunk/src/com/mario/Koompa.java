@@ -6,13 +6,10 @@
 
 package com.mario;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 /**
  *
@@ -276,9 +273,9 @@ public void MovingLeft2(Graphics g){
                          g.fillRect(x+10, y+58,5,5 );
                         g.fillRect(x+15, y+43,5,5 );
                         //continue foot
-                     Graphics2D g3=(Graphics2D)g;
-                    g3.rotate(120, x-10,y-10);
-                 g.fillRect(x-10, y+118,30,2 );
+    Graphics2D g3 = (Graphics2D) g;
+    g3.setStroke(new BasicStroke(3));
+    g3.drawLine(x-8,y+118,x+20,y+113);   //thick
                    
                   
                      
