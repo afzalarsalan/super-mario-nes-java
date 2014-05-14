@@ -2,10 +2,10 @@ package com.mario;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 public class GameFrame extends JPanel{
 
@@ -54,15 +54,21 @@ public class GameFrame extends JPanel{
 		   SwingUtilities.invokeLater(new Runnable() {
 		         @Override
 		         public void run() {
-		            JFrame frame = new JFrame("Mario");
-		      	  	frame.addKeyListener(listener);
-		            frame.setContentPane(new GameFrame());
-		            frame.pack();
-		            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		            frame.setLocationRelativeTo(null); // center the application window
-		            frame.setResizable(false);
-		            frame.setSize(StaticStuff.CANVAS_WIDTH, StaticStuff.CANVAS_HEIGHT);
-		            frame.setVisible(true);
+		            final JFrame frame1 = new JFrame("Mario");
+		      	  	frame1.addKeyListener(listener);
+		            frame1.setContentPane(new GameFrame());
+		            frame1.pack();
+		            frame1.setLocationRelativeTo(null); // center the application window
+		            frame1.setResizable(false);
+		            frame1.setSize(StaticStuff.CANVAS_WIDTH, StaticStuff.CANVAS_HEIGHT);
+		            frame1.setVisible(true);
+                    frame1.addWindowListener(new WindowAdapter() {
+                        @Override
+                        public void windowClosing(WindowEvent windowEvent) {
+                            MainMenu.setVisible(true);
+                            super.windowClosed(windowEvent);
+                        }
+                    });
 		         }
 		      }); 
 	   }
