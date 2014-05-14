@@ -49,23 +49,27 @@ public class GameFrame extends JPanel{
 				
 			}  
 	   };
+	   
+	   public static void runGame(){
+		   SwingUtilities.invokeLater(new Runnable() {
+		         @Override
+		         public void run() {
+		            JFrame frame = new JFrame("Mario");
+		      	  	frame.addKeyListener(listener);
+		            frame.setContentPane(new GameFrame());
+		            frame.pack();
+		            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		            frame.setLocationRelativeTo(null); // center the application window
+		            frame.setResizable(false);
+		            frame.setSize(StaticStuff.CANVAS_WIDTH, StaticStuff.CANVAS_HEIGHT);
+		            frame.setVisible(true);
+		         }
+		      }); 
+	   }
 	
 	   /** The Entry main method */
 	   public static void main(String[] args) {
 	      // Run the GUI codes on the Event-Dispatching thread for thread safety
-	      SwingUtilities.invokeLater(new Runnable() {
-	         @Override
-	         public void run() {
-	            JFrame frame = new JFrame("Mario");
-	      	  	frame.addKeyListener(listener);
-	            frame.setContentPane(new GameFrame());
-	            frame.pack();
-	            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	            frame.setLocationRelativeTo(null); // center the application window
-	            frame.setResizable(false);
-	            frame.setSize(StaticStuff.CANVAS_WIDTH, StaticStuff.CANVAS_HEIGHT);
-	            frame.setVisible(true);
-	         }
-	      });
+	      runGame();
 	   }
 }
