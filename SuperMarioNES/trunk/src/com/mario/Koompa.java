@@ -34,7 +34,7 @@ j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 }
 class KompaTrooper extends JPanel implements ActionListener{
     int x,y;
-    KompaTrooper(int x,int y){
+    public KompaTrooper(int x,int y){
         this.x=x;
         this.y=y;
          setSize(1000,1000);
