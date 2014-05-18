@@ -6,6 +6,7 @@ public class Mario {
 	ImageHelper marioSwitch = new ImageHelper();
 	ImageHelper marioStand = new ImageHelper();
 	int x,y;
+	int dir = 0; //0 is left 1 is right
 	int frame;
 	boolean dead;
 	int velocity = 2;
