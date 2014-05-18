@@ -1,5 +1,6 @@
 package com.mario;
 
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
@@ -29,7 +30,10 @@ public class GameFrame extends JPanel{
 	}
 	
 	public void update(){
-		
+		if(StaticStuff.mario.walking)
+			StaticStuff.mario.frame++;
+		if(StaticStuff.mario.frame > 2)
+			StaticStuff.mario.frame = 0;
 	}
 	
 	  static KeyListener listener = new KeyListener(){
@@ -41,14 +45,24 @@ public class GameFrame extends JPanel{
 			@Override
 			public void keyPressed(KeyEvent e) {
 				// TODO Auto-generated method stub
-				
+				if(e.getKeyCode() == KeyEvent.VK_RIGHT){
+					StaticStuff.mario.walking = true;
+					StaticStuff.mario.frame++;
+				}
 			}
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-				
+				if(e.getKeyCode() == KeyEvent.VK_RIGHT){
+					StaticStuff.mario.walking = false;
+				}
 			}  
 	   };
+	   
+	   @Override
+	   public void paintComponent(Graphics g){
+		   	StaticStuff.mario.framesRight[StaticStuff.mario.frame].paint(g, StaticStuff.mario.framesRight[StaticStuff.mario.frame].ca, 50, 50);
+	   }
 	   
 	   public static void runGame(){
 		   SwingUtilities.invokeLater(new Runnable() {
@@ -76,6 +90,7 @@ public class GameFrame extends JPanel{
 	   /** The Entry main method */
 	   public static void main(String[] args) {
 	      // Run the GUI codes on the Event-Dispatching thread for thread safety
+		   StaticStuff.mario.loadImages();
 	      runGame();
 	   }
 }
