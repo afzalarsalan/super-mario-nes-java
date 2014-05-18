@@ -10,7 +10,7 @@ import javax.swing.*;
 
 public class GameFrame extends JPanel{
 
-	static int frameRate = 60;
+	static int frameRate = 30;
 	
 	public GameFrame(){
 		Thread animationThread = new Thread () {
@@ -47,21 +47,34 @@ public class GameFrame extends JPanel{
 				// TODO Auto-generated method stub
 				if(e.getKeyCode() == KeyEvent.VK_RIGHT){
 					StaticStuff.mario.walking = true;
+					StaticStuff.mario.dir = 1;
+					StaticStuff.mario.frame++;
+				}
+				if(e.getKeyCode() == KeyEvent.VK_LEFT){
+					StaticStuff.mario.walking = true;
+					StaticStuff.mario.dir = 0;
 					StaticStuff.mario.frame++;
 				}
 			}
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_RIGHT){
-					StaticStuff.mario.walking = false;
-				}
+				//if(e.getKeyCode() == KeyEvent.VK_RIGHT){
+				//	StaticStuff.mario.walking = false;
+				//}
+				//if(e.getKeyCode() == KeyEvent.VK_LEFT){
+				//	StaticStuff.mario.walking = false;
+				//}
 			}  
 	   };
 	   
 	   @Override
 	   public void paintComponent(Graphics g){
-		   	StaticStuff.mario.framesRight[StaticStuff.mario.frame].paint(g, StaticStuff.mario.framesRight[StaticStuff.mario.frame].ca, 50, 50);
+		   g.clearRect(0, 0, 800, 600);
+		   if(StaticStuff.mario.dir == 1)
+			   StaticStuff.mario.framesRight[StaticStuff.mario.frame].paint(g, StaticStuff.mario.framesRight[StaticStuff.mario.frame].ca, 50, 50);
+		   else
+			   StaticStuff.mario.framesLeft[StaticStuff.mario.frame].paint(g, StaticStuff.mario.framesLeft[StaticStuff.mario.frame].ca, 50, 50);
 	   }
 	   
 	   public static void runGame(){
