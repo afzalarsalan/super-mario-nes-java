@@ -50,4 +50,14 @@ public class ImageHelper {
 		}
 	}
 	
+	public void flip(){
+		for(int r = 0; r < ca.length; r++)
+			for(int c = 0; c < ca[r].length; c++)
+			{
+				Color temp = ca[r][c];
+				ca[r][c] = ca[r][ca[r].length-1-c];
+				ca[r][ca[r].length-1-c] = temp;
+			}
+	}
+	
 }
