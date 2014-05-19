@@ -43,8 +43,9 @@ public class MainMenu {
         buttonTransparentButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
-                Game game = new Game();
-                game.start();
+                StaticStuff.mario.loadImages();
+                GameFrame gameFrame = new GameFrame();
+                gameFrame.runGame();
                 frame.setVisible(false);
             }
         });
