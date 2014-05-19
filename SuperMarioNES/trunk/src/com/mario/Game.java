@@ -5,6 +5,9 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBuffer;
+import java.awt.image.DataBufferInt;
 
 /**
  * Created by Arsalan Afzal on 5/18/14. Made for Comp Sci II project
@@ -19,12 +22,16 @@ public class Game extends Canvas implements Runnable{
     private JFrame frame;
     private boolean isRunning;
     public KoompaTrooper koompaTrooper;
+    private Screen screen;
+    private BufferedImage image = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
+    private int[] pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
 
     public Game(){
         Dimension size = new Dimension(width * scale, height * scale);
         setPreferredSize(size);
         setMaximumSize(size);
         setMinimumSize(size);
+        screen = new Screen(width,height);
         frame = new JFrame();
         frame.setResizable(false);
         frame.setTitle("Mario");
