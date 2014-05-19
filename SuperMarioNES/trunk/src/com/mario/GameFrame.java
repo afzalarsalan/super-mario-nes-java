@@ -10,7 +10,7 @@ import javax.swing.*;
 
 public class GameFrame extends JPanel{
 
-	static int frameRate = 20;
+	static int frameRate = 60;
     private boolean isRunning = true;
 	
 	public GameFrame(){
@@ -42,9 +42,9 @@ public class GameFrame extends JPanel{
 		if(StaticStuff.mario.walking){
 			StaticStuff.mario.frame++;
 			if(StaticStuff.mario.dir == 1)
-				StaticStuff.mario.x+=10;
+				StaticStuff.mario.x+=5;
 			else
-				StaticStuff.mario.x-=10;
+				StaticStuff.mario.x-=5;
 		}
 		
 	}
@@ -94,6 +94,7 @@ public class GameFrame extends JPanel{
 		   SwingUtilities.invokeLater(new Runnable() {
 		         @Override
 		         public void run() {
+		        	StaticStuff.mario.loadImages();
 		            final JFrame frame1 = new JFrame("Mario");
 		      	  	frame1.addKeyListener(listener);
 		            frame1.setContentPane(new GameFrame());
