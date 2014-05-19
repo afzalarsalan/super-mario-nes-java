@@ -21,6 +21,6 @@ public class LevelBuilder {
 		}
 		}catch(IOException e){
 			System.out.println("Failed to import " + filename + ".lvl");
-		};
+		}
 	}
 }

@@ -6,30 +6,33 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import static com.mario.MainMenu.frame;
-
 public class ModifiedGameFrame extends JPanel{
 
 	static int frameRate = 60;
 
+    private boolean isRunning = true;
+
 	public ModifiedGameFrame(){
-		Thread animationThread = new Thread () {
-	         @Override
-	         public void run() {
-	            while (true) {
-	            	
-	               update();   // update the position and image
-	               repaint();  // Refresh the display
-	               try {
-	                  Thread.sleep(2500 / frameRate); // delay and yield to other threads
-	               } catch (InterruptedException ex) { }
-	            }
-	         }
-	      };
-	      animationThread.start();  // start the thread to run animation
-	}
-	
-	public void update(){
+        Thread animationThread = new Thread () {
+            @Override
+            public void run() {
+                if (isRunning) {
+                    do {
+
+                        update();   // update the position and image
+                        repaint();  // Refresh the display
+                        try {
+                            Thread.sleep(2500 / frameRate); // delay and yield to other threads
+                        } catch (InterruptedException ex) {
+                        }
+                    } while (isRunning);
+                }
+            }
+        };
+        animationThread.start();  // start the thread to run animation
+    }
+
+    public void update(){
 		
 	}
 	

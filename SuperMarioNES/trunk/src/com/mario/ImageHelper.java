@@ -2,7 +2,6 @@ package com.mario;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.Arrays;
 
 
 public class ImageHelper {
