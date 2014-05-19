@@ -82,14 +82,11 @@ public class Game extends Canvas implements Runnable{
     }
 
     public void render() {
-        bufferStrategy = getBufferStrategy();
+        BufferStrategy bufferStrategy = getBufferStrategy();
         if (bufferStrategy == null) {
             createBufferStrategy(3);
-            bufferStrategy = getBufferStrategy();
             return;
         }
-        createBufferStrategy(3);
-        bufferStrategy = getBufferStrategy();
         Graphics g = bufferStrategy.getDrawGraphics();
         g.setColor(Color.BLACK);
         koompaTrooper.MovingLeft2(g);

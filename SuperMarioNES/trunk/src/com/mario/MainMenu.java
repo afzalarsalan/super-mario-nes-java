@@ -37,6 +37,9 @@ public class MainMenu {
         buttonTransparentButton2.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
+                Game game = new Game();
+                game.start();
+                frame.setVisible(false);
                 super.mouseClicked(mouseEvent);
             }
         });
