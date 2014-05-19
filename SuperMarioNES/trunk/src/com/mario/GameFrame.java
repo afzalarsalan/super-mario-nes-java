@@ -107,6 +107,7 @@ public class GameFrame extends JPanel{
                         @Override
                         public void windowClosing(WindowEvent windowEvent) {
                             MainMenu.setVisible(true);
+                            frame1.dispose();
                             super.windowClosed(windowEvent);
                         }
                     });
