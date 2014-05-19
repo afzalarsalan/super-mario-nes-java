@@ -5,12 +5,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 /**
- * Created by arsalan on 5/10/14.
+ * Created by arsalan on 5/10/14. Made for Comp Sci II project
  */
 public class MainMenu {
     private JPanel MenuPage;
@@ -24,7 +22,7 @@ public class MainMenu {
     public static void main(String[] args) {
         frame = new JFrame("MainMenu");
         frame.setContentPane(new MainMenu().MenuPage);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.pack();
         frame.setSize(800,600);
@@ -45,10 +43,9 @@ public class MainMenu {
         buttonTransparentButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent mouseEvent) {
-                GameFrame gameFrame = new GameFrame();
-                gameFrame.runGame();
+                Game game = new Game();
+                game.start();
                 frame.setVisible(false);
-                super.mouseClicked(mouseEvent);
             }
         });
     }

@@ -1,6 +1,5 @@
 package com.mario;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 
 import javax.swing.*;
 
@@ -25,7 +24,8 @@ class MyPanel extends JComponent
 {
 	static int frameRate = 60;
 	String marioStr = "null, null, null, (255:0:0), (255:0:0), (255:0:0), (255:0:0), (255:0:0), null, null, null, null, null, null, (255:0:0), (255:0:0), (255:0:0), (255:0:0), (255:0:0), (255:0:0), (255:0:0), (255:0:0), (255:0:0), null, null, null, (0:0:0), (0:0:0), (0:0:0), (255:200:0), (255:200:0), (0:0:0), (255:200:0), null, null, null, null, (0:0:0), (255:200:0), (0:0:0), (255:200:0), (255:200:0), (255:200:0), (0:0:0), (255:200:0), (255:200:0), (255:200:0), null, null, (0:0:0), (255:200:0), (0:0:0), (0:0:0), (255:200:0), (255:200:0), (255:200:0), (0:0:0), (255:200:0), (255:200:0), (255:200:0), null, (0:0:0), (0:0:0), (255:200:0), (255:200:0), (255:200:0), (255:200:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), null, null, null, null, (255:200:0), (255:200:0), (255:200:0), (255:200:0), (255:200:0), (255:200:0), (255:200:0), null, null, null, null, (0:0:0), (0:0:0), (255:0:0), (0:0:0), (0:0:0), (0:0:0), null, null, null, null, null, (0:0:0), (0:0:0), (0:0:0), (255:0:0), (0:0:0), (0:0:0), (255:0:0), (0:0:0), (0:0:0), (0:0:0), null, (0:0:0), (0:0:0), (0:0:0), (0:0:0), (255:0:0), (255:0:0), (255:0:0), (255:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (255:200:0), (255:200:0), (0:0:0), (255:0:0), (255:200:0), (255:0:0), (255:0:0), (255:200:0), (255:0:0), (0:0:0), (255:200:0), (255:200:0), (255:200:0), (255:200:0), (255:200:0), (255:0:0), (255:0:0), (255:0:0), (255:0:0), (255:0:0), (255:0:0), (255:200:0), (255:200:0), (255:200:0), (255:200:0), (255:200:0), (255:0:0), (255:0:0), (255:0:0), (255:0:0), (255:0:0), (255:0:0), (255:0:0), (255:0:0), (255:200:0), (255:200:0), null, null, (255:0:0), (255:0:0), (255:0:0), null, null, (255:0:0), (255:0:0), (255:0:0), null, null, null, (0:0:0), (0:0:0), (0:0:0), null, null, null, null, (0:0:0), (0:0:0), (0:0:0), null, (0:0:0), (0:0:0), (0:0:0), (0:0:0), null, null, null, null, (0:0:0), (0:0:0), (0:0:0), (0:0:0)";
-	
+	private boolean isRunning = true;
+
 	MyPanel()
 	{
 		setSize(800, 600);
@@ -33,20 +33,22 @@ class MyPanel extends JComponent
 		Thread animationThread = new Thread () {
 	         @Override
 	         public void run() {
-	            while (true) {
-	            	
-	               update();   // update the position and image
-	               repaint();  // Refresh the display
-	               try {
-	                  Thread.sleep(2500 / frameRate); // delay and yield to other threads
-	               } catch (InterruptedException ex) { }
-	            }
-	         }
-	      };
-	      mario.setDim(16, 12, 10);
-	  	  mario.parse(marioStr);
-	      animationThread.start();  // start the thread to run animation
-	}
+                 if (isRunning) {
+                     do {
+                         update();   // update the position and image
+                         repaint();  // Refresh the display
+                         try {
+                             Thread.sleep(2500 / frameRate); // delay and yield to other threads
+                         } catch (InterruptedException ex) {
+                         }
+                     } while (isRunning);
+                 }
+             }
+        };
+        mario.setDim(16, 12, 10);
+        mario.parse(marioStr);
+        animationThread.start();  // start the thread to run animation
+    }
 	
 	public void update(){
 		
@@ -56,7 +58,7 @@ class MyPanel extends JComponent
 	
 	public void paintComponent(Graphics g)
 	{
-		Graphics2D g2 = (Graphics2D)g;
+		//Graphics2D g2 = (Graphics2D)g;
 		//g2.scale(0.3, 0.3);
 		//Still Mario
 		//stillMario(g);

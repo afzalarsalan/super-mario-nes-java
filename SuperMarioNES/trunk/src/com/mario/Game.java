@@ -2,6 +2,8 @@ package com.mario;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.awt.image.BufferStrategy;
 
 /**
@@ -29,9 +31,16 @@ public class Game extends Canvas implements Runnable{
         frame.setLayout(new BorderLayout());
         frame.add(this,BorderLayout.CENTER);
         frame.pack();
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        //frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent windowEvent) {
+                MainMenu.setVisible(true);
+                frame.dispose();
+            }
+        });
 
     }
 

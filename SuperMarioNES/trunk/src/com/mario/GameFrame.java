@@ -11,23 +11,27 @@ import javax.swing.*;
 public class GameFrame extends JPanel{
 
 	static int frameRate = 30;
+    private boolean isRunning = true;
 	
 	public GameFrame(){
 		Thread animationThread = new Thread () {
 	         @Override
 	         public void run() {
-	            while (true) {
-	            	
-	               update();   // update the position and image
-	               repaint();  // Refresh the display
-	               try {
-	                  Thread.sleep(2500 / frameRate); // delay and yield to other threads
-	               } catch (InterruptedException ex) { }
-	            }
-	         }
-	      };
-	      animationThread.start();  // start the thread to run animation
-	}
+                 if (isRunning) {
+                     do {
+                         update();   // update the position and image
+                         repaint();  // Refresh the display
+                         try {
+                             Thread.sleep(2500 / frameRate); // delay and yield to other threads
+                         } catch (InterruptedException ex) {
+                             ex.printStackTrace();
+                         }
+                     } while (isRunning);
+                 }
+             }
+        };
+        animationThread.start();  // start the thread to run animation
+    }
 	
 	public void update(){
 		if(StaticStuff.mario.walking)
