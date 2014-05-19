@@ -8,6 +8,7 @@ public class ImageHelper {
 	
 	int size;
 	Color[][] ca;
+	Color[][] ca2;
 	
 	public void setDim(int dimX, int dimY, int size){
 		ca = new Color[dimX][dimY];
@@ -50,14 +51,14 @@ public class ImageHelper {
 	}
 	
 	public void flip(){
-		for(int r = 0; r < ca.length; r++){
-			for(int c = 0; c < ca[r].length; c++)
+		ca2 = new Color[ca.length][ca[0].length];
+		for(int r = 0; r < ca2.length; r++){
+			for(int c = 0; c < ca2[r].length; c++)
 			{
-				Color temp = ca[r][c];
-				ca[r][c] = ca[r][ca[r].length-1-c];
-				ca[r][ca[r].length-1-c] = temp;
+				//Color temp = ca[r][c];
+				ca2[r][c] = ca[r][ca[r].length-1-c];
+				//ca2[r][ca2[r].length-1-c] = temp;
 			}
-			System.out.println();
 		}
 	}
 	
