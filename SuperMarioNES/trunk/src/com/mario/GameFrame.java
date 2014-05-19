@@ -10,7 +10,7 @@ import javax.swing.*;
 
 public class GameFrame extends JPanel{
 
-	static int frameRate = 30;
+	static int frameRate = 20;
     private boolean isRunning = true;
 	
 	public GameFrame(){
@@ -34,10 +34,19 @@ public class GameFrame extends JPanel{
     }
 	
 	public void update(){
-		if(StaticStuff.mario.walking)
-			StaticStuff.mario.frame++;
-		if(StaticStuff.mario.frame > 2)
+		//mario code
+		if(StaticStuff.mario.frame > 1)
 			StaticStuff.mario.frame = 0;
+		if(!StaticStuff.mario.walking)
+			StaticStuff.mario.frame = 1;
+		if(StaticStuff.mario.walking){
+			StaticStuff.mario.frame++;
+			if(StaticStuff.mario.dir == 1)
+				StaticStuff.mario.x+=10;
+			else
+				StaticStuff.mario.x-=10;
+		}
+		
 	}
 	
 	  static KeyListener listener = new KeyListener(){
@@ -49,12 +58,12 @@ public class GameFrame extends JPanel{
 			@Override
 			public void keyPressed(KeyEvent e) {
 				// TODO Auto-generated method stub
-				if(e.getKeyCode() == KeyEvent.VK_RIGHT){
+				if(e.getKeyCode() == KeyEvent.VK_RIGHT && !StaticStuff.mario.walking){
 					StaticStuff.mario.walking = true;
 					StaticStuff.mario.dir = 1;
 					StaticStuff.mario.frame++;
 				}
-				if(e.getKeyCode() == KeyEvent.VK_LEFT){
+				if(e.getKeyCode() == KeyEvent.VK_LEFT && !StaticStuff.mario.walking){
 					StaticStuff.mario.walking = true;
 					StaticStuff.mario.dir = 0;
 					StaticStuff.mario.frame++;
@@ -63,12 +72,12 @@ public class GameFrame extends JPanel{
 
 			@Override
 			public void keyReleased(KeyEvent e) {
-				//if(e.getKeyCode() == KeyEvent.VK_RIGHT){
-				//	StaticStuff.mario.walking = false;
-				//}
-				//if(e.getKeyCode() == KeyEvent.VK_LEFT){
-				//	StaticStuff.mario.walking = false;
-				//}
+				if(e.getKeyCode() == KeyEvent.VK_RIGHT){
+					StaticStuff.mario.walking = false;
+				}
+				if(e.getKeyCode() == KeyEvent.VK_LEFT){
+					StaticStuff.mario.walking = false;
+				}
 			}  
 	   };
 	   
@@ -76,9 +85,9 @@ public class GameFrame extends JPanel{
 	   public void paintComponent(Graphics g){
 		   g.clearRect(0, 0, 800, 600);
 		   if(StaticStuff.mario.dir == 1)
-			   StaticStuff.mario.framesRight[StaticStuff.mario.frame].paint(g, StaticStuff.mario.framesRight[StaticStuff.mario.frame].ca, 50, 50);
+			   StaticStuff.mario.framesRight[StaticStuff.mario.frame].paint(g, StaticStuff.mario.framesRight[StaticStuff.mario.frame].ca, StaticStuff.mario.x, StaticStuff.mario.y);
 		   else
-			   StaticStuff.mario.framesLeft[StaticStuff.mario.frame].paint(g, StaticStuff.mario.framesLeft[StaticStuff.mario.frame].ca, 50, 50);
+			   StaticStuff.mario.framesLeft[StaticStuff.mario.frame].paint(g, StaticStuff.mario.framesLeft[StaticStuff.mario.frame].ca2, StaticStuff.mario.x, StaticStuff.mario.y);
 	   }
 	   
 	   public static void runGame(){
