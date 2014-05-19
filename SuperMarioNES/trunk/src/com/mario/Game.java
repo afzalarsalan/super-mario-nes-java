@@ -22,16 +22,17 @@ public class Game extends Canvas implements Runnable{
     private JFrame frame;
     private boolean isRunning;
     public KoompaTrooper koompaTrooper;
-//    private Screen screen;
-//    private BufferedImage image = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
-//    private int[] pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
+    private Screen screen;
+    private BufferedImage image = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
+    private int[] pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
+    private BufferStrategy bufferStrategy;
 
     public Game(){
         Dimension size = new Dimension(width * scale, height * scale);
         setPreferredSize(size);
         setMaximumSize(size);
         setMinimumSize(size);
-//        screen = new Screen(width,height);
+        //screen = new Screen(width,height);
         frame = new JFrame();
         frame.setResizable(false);
         frame.setTitle("Mario");
@@ -81,12 +82,16 @@ public class Game extends Canvas implements Runnable{
     }
 
     public void render() {
-        BufferStrategy bufferStrategy = getBufferStrategy();
+        bufferStrategy = getBufferStrategy();
         if (bufferStrategy == null) {
             createBufferStrategy(3);
+            bufferStrategy = getBufferStrategy();
             return;
         }
+        createBufferStrategy(3);
+        bufferStrategy = getBufferStrategy();
         Graphics g = bufferStrategy.getDrawGraphics();
+        g.setColor(Color.BLACK);
         koompaTrooper.MovingLeft2(g);
         g.dispose();
         bufferStrategy.show();
