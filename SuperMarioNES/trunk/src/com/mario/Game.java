@@ -25,14 +25,14 @@ public class Game extends Canvas implements Runnable{
     private Screen screen;
     private BufferedImage image = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
     private int[] pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
-    private BufferStrategy bufferStrategy;
+    public static String title = "SuperMarioNES";
 
     public Game(){
         Dimension size = new Dimension(width * scale, height * scale);
         setPreferredSize(size);
         setMaximumSize(size);
         setMinimumSize(size);
-        //screen = new Screen(width,height);
+        screen = new Screen(width,height);
         frame = new JFrame();
         frame.setResizable(false);
         frame.setTitle("Mario");
@@ -49,7 +49,7 @@ public class Game extends Canvas implements Runnable{
                 frame.dispose();
             }
         });
-
+        koompaTrooper = new KoompaTrooper(20,10);
     }
 
     public synchronized void start(){
@@ -69,10 +69,30 @@ public class Game extends Canvas implements Runnable{
 
     @Override
     public void run() {
-        koompaTrooper = new KoompaTrooper(20,10);
+        long lastTime = System.nanoTime();
+        long timer = System.currentTimeMillis();
+        double ns = 1000000000.0/60.0;
+        double delta = 0;
+        int frames =0;
+        int updates = 0;
         while(isRunning){
-            update();
+            long now = System.nanoTime();
+            delta += (now - lastTime) / ns;
+            lastTime = now;
+            while (delta >=1){
+                update();
+                updates++;
+                delta--;
+            }
             render();
+            frames++;
+            if(System.currentTimeMillis() - timer > 1000){
+                timer+=1000;
+                System.out.println(updates + "ups, " + frames + " fps");
+                frame.setTitle(title + " | " + updates + "ups, " + frames + " fps");
+                updates = 0;
+                frames = 0;
+            }
         }
 
     }
@@ -87,9 +107,12 @@ public class Game extends Canvas implements Runnable{
             createBufferStrategy(3);
             return;
         }
+        screen.clear();
+        screen.render();
+        System.arraycopy(screen.pixels, 0, pixels, 0, pixels.length);
         Graphics g = bufferStrategy.getDrawGraphics();
-        g.setColor(Color.BLACK);
-        koompaTrooper.MovingLeft2(g);
+        g.drawImage(image,0,0,getWidth(),getHeight(),null);
+        //koompaTrooper.MovingLeft2(g);
         g.dispose();
         bufferStrategy.show();
     }

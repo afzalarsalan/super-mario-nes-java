@@ -12,20 +12,37 @@ public class GameFrame extends JPanel{
 
 	static int frameRate = 60;
     private boolean isRunning = true;
+    public static JFrame frame1;
 	
 	public GameFrame(){
 		Thread animationThread = new Thread () {
 	         @Override
 	         public void run() {
+                 long lastTime = System.nanoTime();
+                 long timer = System.currentTimeMillis();
+                 double ns = 1000000000.0/60.0;
+                 double delta = 0;
+                 int frames =0;
+                 int updates = 0;
                  if (isRunning) {
                      do {
-                         update();   // update the position and image
-                         repaint();  // Refresh the display
-                         try {
-                             Thread.sleep(2500 / frameRate); // delay and yield to other threads
-                         } catch (InterruptedException ex) {
-                             ex.printStackTrace();
+                         long now = System.nanoTime();
+                         delta += (now - lastTime) / ns;
+                         lastTime = now;
+                         while (delta >=1){
+                             update();
+                             updates++;
+                             delta--;
                          }
+                         repaint();
+                         frames++;
+                         if(System.currentTimeMillis() - timer > 1000) {
+                             timer += 1000;
+                             System.out.println(updates + "ups, " + frames + " fps");
+                             frame1.setTitle("SuperMarioNES" + " | " + updates + "ups, " + frames + " fps");
+                             updates = 0;
+                             frames = 0;
+                         }  // Refresh the display
                      } while (isRunning);
                  }
              }
@@ -95,7 +112,7 @@ public class GameFrame extends JPanel{
 		         @Override
 		         public void run() {
 		        	StaticStuff.mario.loadImages();
-		            final JFrame frame1 = new JFrame("Mario");
+		            frame1 = new JFrame("Mario");
 		      	  	frame1.addKeyListener(listener);
 		            frame1.setContentPane(new GameFrame());
 		            frame1.pack();
