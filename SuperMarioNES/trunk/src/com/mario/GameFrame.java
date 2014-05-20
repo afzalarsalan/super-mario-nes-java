@@ -11,41 +11,42 @@ import javax.swing.*;
 public class GameFrame extends JPanel{
 
 	static int frameRate = 60;
-    private boolean isRunning = true;
+    private volatile boolean isRunning = true;
     public static JFrame frame1;
-	
-	public GameFrame(){
-		Thread animationThread = new Thread () {
-	         @Override
-	         public void run() {
-                 long lastTime = System.nanoTime();
-                 long timer = System.currentTimeMillis();
-                 double ns = 1000000000.0/60.0;
-                 double delta = 0;
-                 int frames =0;
-                 int updates = 0;
-                 if (isRunning) {
-                     do {
-                         long now = System.nanoTime();
-                         delta += (now - lastTime) / ns;
-                         lastTime = now;
-                         while (delta >=1){
-                             update();
-                             updates++;
-                             delta--;
-                         }
-                         repaint();
-                         frames++;
-                         if(System.currentTimeMillis() - timer > 1000) {
-                             timer += 1000;
-                             System.out.println(updates + "ups, " + frames + " fps");
-                             frame1.setTitle("SuperMarioNES" + " | " + updates + "ups, " + frames + " fps");
-                             updates = 0;
-                             frames = 0;
-                         }  // Refresh the display
-                     } while (isRunning);
-                 }
-             }
+    public Thread animationThread;
+
+    public GameFrame(){
+        animationThread = new Thread () {
+            @Override
+            public void run() {
+                long lastTime = System.nanoTime();
+                long timer = System.currentTimeMillis();
+                double ns = 1000000000.0/60.0;
+                double delta = 0;
+                int frames =0;
+                int updates = 0;
+                if (!animationThread.isInterrupted()) {
+                    do {
+                        long now = System.nanoTime();
+                        delta += (now - lastTime) / ns;
+                        lastTime = now;
+                        while (delta >=1){
+                            update();
+                            updates++;
+                            delta--;
+                        }
+                        repaint();
+                        frames++;
+                        if(System.currentTimeMillis() - timer > 1000) {
+                            timer += 1000;
+                            System.out.println(updates + "ups, " + frames + " fps");
+                            frame1.setTitle("SuperMarioNES" + " | " + updates + "ups, " + frames + " fps");
+                            updates = 0;
+                            frames = 0;
+                        }  // Refresh the display
+                    } while (!animationThread.isInterrupted());
+                }
+            }
         };
         animationThread.start();  // start the thread to run animation
     }
@@ -59,12 +60,16 @@ public class GameFrame extends JPanel{
 		if(StaticStuff.mario.walking){
 			StaticStuff.mario.frame++;
 			if(StaticStuff.mario.dir == 1)
-				StaticStuff.mario.x+=5;
+				StaticStuff.mario.x+=2;
 			else
-				StaticStuff.mario.x-=5;
+				StaticStuff.mario.x-=2;
 		}
 		
 	}
+
+    public void stop(){
+        isRunning = false;
+    }
 	
 	  static KeyListener listener = new KeyListener(){
 		   @Override
@@ -107,7 +112,7 @@ public class GameFrame extends JPanel{
 			   StaticStuff.mario.framesLeft[StaticStuff.mario.frame].paint(g, StaticStuff.mario.framesLeft[StaticStuff.mario.frame].ca2, StaticStuff.mario.x, StaticStuff.mario.y);
 	   }
 	   
-	   public static void runGame(){
+	   public void runGame(){
 		   SwingUtilities.invokeLater(new Runnable() {
 		         @Override
 		         public void run() {
@@ -123,7 +128,14 @@ public class GameFrame extends JPanel{
                     frame1.addWindowListener(new WindowAdapter() {
                         @Override
                         public void windowClosing(WindowEvent windowEvent) {
+                            animationThread.interrupt();
                             MainMenu.setVisible(true);
+                            isRunning = false;
+                            try {
+                                animationThread.join();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                             frame1.dispose();
                             super.windowClosed(windowEvent);
                         }
@@ -131,11 +143,13 @@ public class GameFrame extends JPanel{
 		         }
 		      }); 
 	   }
+
 	
 	   /** The Entry main method */
 	   public static void main(String[] args) {
 	      // Run the GUI codes on the Event-Dispatching thread for thread safety
 		   StaticStuff.mario.loadImages();
-	      runGame();
+	        new GameFrame().runGame();
 	   }
+
 }
