@@ -1,3 +1,4 @@
+/*
 package com.mario;
 
 import javax.swing.*;
@@ -78,9 +79,12 @@ public class ModifiedGameFrame extends JPanel{
 		      }); 
 	   }
 	
-	   /** The Entry main method */
+	   */
+/** The Entry main method *//*
+
 	   public static void main(String[] args) {
 	      // Run the GUI codes on the Event-Dispatching thread for thread safety
 	      runGame();
 	   }
 }
+*/

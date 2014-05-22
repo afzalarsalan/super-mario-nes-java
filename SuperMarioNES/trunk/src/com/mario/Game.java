@@ -21,7 +21,7 @@ public class Game extends Canvas implements Runnable{
     private Thread thread;
     private JFrame frame;
     private boolean isRunning;
-    public KoompaTrooper koompaTrooper;
+    public Koompa koompaTrooper;
     private Screen screen;
     private BufferedImage image = new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
     private int[] pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
@@ -49,7 +49,7 @@ public class Game extends Canvas implements Runnable{
                 frame.dispose();
             }
         });
-        koompaTrooper = new KoompaTrooper(20,10);
+        koompaTrooper = new Koompa(20,10);
     }
 
     public synchronized void start(){
