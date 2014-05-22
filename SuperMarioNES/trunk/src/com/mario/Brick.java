@@ -13,52 +13,23 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-/**
- *
- * @author lathasuraparaju
- */
-public class Brick {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-      // MarioBrick panel = new MarioBrick(100,10);  
-         MarioBrick p=new MarioBrick(200,99);
-        
-        JFrame application = new JFrame();                            // the program itself
-        application.setBackground(Color.WHITE);
-        application.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   // set frame to exit
-                                                          // when it is closed
-        //application.add(panel);
-        application.add(p);
-
-
-        application.setSize(800, 800);         // window is 500 pixels wide, 400 high
-        application.setVisible(true); 
-    }
-    
-}
-class MarioBrick extends JPanel {
+public class Brick{
     int width,height;
-    Timer t;
      int x,y;
-    MarioBrick(int x,int y){
-        setBackground(Color.WHITE);
-        width=getWidth();
-         height=getHeight();
-      
-         
+     boolean hit = false;
+     
+    Brick(int x,int y){
          this.x=x;
          this.y=y;
-         
     }
-    public void paintComponent(Graphics g)
-    {
-        //NormalBrick(g);
-        StarBrick(g);
-        //BrickWhenFinishedCollision(g);
+    
+    public void draw(Graphics g){
+    	if(hit)
+    		BrickWhenFinishedCollision(g);
+    	else
+    		NormalBrick(g);
     }
+    
     public void NormalBrick(Graphics g){
        
         Graphics2D g1=(Graphics2D)g;
