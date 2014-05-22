@@ -12,20 +12,16 @@ public class LevelBuilder {
 	String[][] lvl;
 	//there are 28 rows and 39 cols
 
-    public LevelBuilder(String filename){
-        try{
-            Scanner sc = new Scanner(new File(filename));
-            rows = sc.nextInt();
-            cols = sc.nextInt();
-            lvl = new String[rows][cols];
-            sc.nextLine();
-            for(int i = 0; i < rows; i++){
-                String line = sc.nextLine();
-                for(int a = 0; a < line.length(); a++)
-                    lvl[i][a] = ""+line.charAt(a);
-            }
-        }catch(IOException e){
-            System.out.println("Failed to import " + filename);
+    public LevelBuilder(String filename) throws IOException {
+        Scanner sc = new Scanner(getClass().getResourceAsStream(filename));
+        rows = sc.nextInt();
+        cols = sc.nextInt();
+        lvl = new String[rows][cols];
+        sc.nextLine();
+        for(int i = 0; i < rows; i++){
+            String line = sc.nextLine();
+            for(int a = 0; a < line.length(); a++)
+                lvl[i][a] = ""+line.charAt(a);
         }
     }
 
