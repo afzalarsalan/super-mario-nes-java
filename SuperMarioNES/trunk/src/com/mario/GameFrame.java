@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.util.HashMap;
 
 import javax.swing.*;
@@ -173,8 +174,12 @@ public class GameFrame extends JPanel{
 		         @Override
 		         public void run() {
 		        	StaticStuff.mario.loadImages();
-		        	lb = new LevelBuilder("src/level1.lvl");
-		        	//LevelBuilder.importLvl("src/level1.lvl",lb);
+                     try {
+                         lb = new LevelBuilder("level1.lvl");
+                     } catch (IOException e) {
+                         e.printStackTrace();
+                     }
+                     //LevelBuilder.importLvl("src/level1.lvl",lb);
 		        	loadLevel();
 		            frame1 = new JFrame("Mario");
 		      	  	frame1.addKeyListener(listener);
