@@ -173,7 +173,7 @@ public class GameFrame extends JPanel{
 		         @Override
 		         public void run() {
 		        	StaticStuff.mario.loadImages();
-		        	lb.importLvl("level1.lvl");
+		        	LevelBuilder.importLvl("level1.lvl",lb);
 		        	loadLevel();
 		            frame1 = new JFrame("Mario");
 		      	  	frame1.addKeyListener(listener);
