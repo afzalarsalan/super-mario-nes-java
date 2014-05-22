@@ -134,7 +134,7 @@ public class GameFrame extends JPanel{
 	   }
 	   
 	   public void loadLevel(){
-		   lvlmap = new Object[lb.lvl.length][lb.lvl[0].length];
+		   lvlmap = new Object[LevelBuilder.rows][LevelBuilder.cols];
 		   for(int r = 0; r < lb.lvl.length; r++)
 			   for(int c = 0; c < lb.lvl[0].length; c++)
 				   lvlmap[r][c] = key.get(lb.lvl[r][c]);
@@ -173,7 +173,8 @@ public class GameFrame extends JPanel{
 		         @Override
 		         public void run() {
 		        	StaticStuff.mario.loadImages();
-		        	LevelBuilder.importLvl("level1.lvl",lb);
+		        	lb = new LevelBuilder();
+		        	LevelBuilder.importLvl("src/level1.lvl",lb);
 		        	loadLevel();
 		            frame1 = new JFrame("Mario");
 		      	  	frame1.addKeyListener(listener);
