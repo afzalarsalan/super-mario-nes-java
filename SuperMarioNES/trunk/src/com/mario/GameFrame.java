@@ -1,11 +1,13 @@
 package com.mario;
 
+import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.HashMap;
 
 import javax.swing.*;
 
@@ -15,6 +17,9 @@ public class GameFrame extends JPanel{
     private volatile boolean isRunning = true;
     public static JFrame frame1;
     public Thread animationThread;
+    public LevelBuilder lb;
+    HashMap<String, Object> key = new HashMap();
+    Object[][] lvlmap = new Object[lb.lvl.length][lb.lvl[0].length];
     
     public double GRAVITY = 9.8;
     public double TERMINAL = 20;
@@ -122,6 +127,22 @@ public class GameFrame extends JPanel{
 			}  
 	   };
 	   
+	   public void drawGrid(Graphics g){
+		   for(int r = 0; r < 800; r+=20)
+			   for(int c = 0; c < 600; c+=20)
+				   g.drawRect(r, c, 20, 20);
+	   }
+	   
+	   public void loadLevel(){
+		   for(int r = 0; r < lb.lvl.length; r++)
+			   for(int c = 0; c < lb.lvl[0].length; c++)
+				   lvlmap[r][c] = key.get(lb.lvl[r][c]);
+	   }
+	   
+	   public void drawLevel(Graphics g){
+		   
+	   }
+	   
 	   @Override
 	   public void paintComponent(Graphics g){
 		   g.clearRect(0, 0, 800, 600);
@@ -129,9 +150,18 @@ public class GameFrame extends JPanel{
 			   StaticStuff.mario.framesRight[StaticStuff.mario.frame].paint(g, StaticStuff.mario.framesRight[StaticStuff.mario.frame].ca, StaticStuff.mario.x, StaticStuff.mario.y);
 		   else
 			   StaticStuff.mario.framesLeft[StaticStuff.mario.frame].paint(g, StaticStuff.mario.framesLeft[StaticStuff.mario.frame].ca2, StaticStuff.mario.x, StaticStuff.mario.y);
-		  // StaticStuff.mario.framesRight[2].paint(g, StaticStuff.mario.framesRight[0].ca, StaticStuff.mario.x, StaticStuff.mario.y);
+		  
+		   // StaticStuff.mario.framesRight[2].paint(g, StaticStuff.mario.framesRight[0].ca, StaticStuff.mario.x, StaticStuff.mario.y);
 		  // StaticStuff.mario.framesRight[2].paint(g, StaticStuff.mario.framesRight[1].ca, StaticStuff.mario.x + 100, StaticStuff.mario.y);
 		  // StaticStuff.mario.framesRight[2].paint(g, StaticStuff.mario.framesRight[2].ca, StaticStuff.mario.x + 200, StaticStuff.mario.y);
+		   
+		   drawGrid(g);
+	   }
+	   
+	   public void loadKey(){
+		   key.put("M", StaticStuff.mario);
+		   //key.put("O", new Brick());
+		   key.put("P", new PowerBrick());
 	   }
 	   
 	   public void runGame(){
@@ -139,6 +169,8 @@ public class GameFrame extends JPanel{
 		         @Override
 		         public void run() {
 		        	StaticStuff.mario.loadImages();
+		        	lb.importLvl("level1.lvl");
+		        	loadLevel();
 		            frame1 = new JFrame("Mario");
 		      	  	frame1.addKeyListener(listener);
 		            frame1.setContentPane(new GameFrame());
