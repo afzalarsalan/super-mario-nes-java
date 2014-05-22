@@ -7,6 +7,7 @@ import java.util.Scanner;
 public class LevelBuilder {
 	
 	String[][] lvl;
+	//there are 28 rows and 39 cols
 
 	public void importLvl(String filename){
 		try{
@@ -20,7 +21,7 @@ public class LevelBuilder {
 				lvl[i][a] = ""+line.charAt(a);
 		}
 		}catch(IOException e){
-			System.out.println("Failed to import " + filename + ".lvl");
+			System.out.println("Failed to import " + filename);
 		}
 	}
 }
