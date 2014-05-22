@@ -19,7 +19,7 @@ public class GameFrame extends JPanel{
     public Thread animationThread;
     public LevelBuilder lb;
     HashMap<String, Object> key = new HashMap();
-    Object[][] lvlmap = new Object[lb.lvl.length][lb.lvl[0].length];
+    Object[][] lvlmap;
     
     public double GRAVITY = 9.8;
     public double TERMINAL = 20;
@@ -134,6 +134,7 @@ public class GameFrame extends JPanel{
 	   }
 	   
 	   public void loadLevel(){
+		   lvlmap = new Object[lb.lvl.length][lb.lvl[0].length];
 		   for(int r = 0; r < lb.lvl.length; r++)
 			   for(int c = 0; c < lb.lvl[0].length; c++)
 				   lvlmap[r][c] = key.get(lb.lvl[r][c]);
@@ -160,8 +161,11 @@ public class GameFrame extends JPanel{
 	   
 	   public void loadKey(){
 		   key.put("M", StaticStuff.mario);
-		   //key.put("O", new Brick());
+		   key.put("X", new Brick());
 		   key.put("P", new PowerBrick());
+		   key.put("m", new Mushroom());
+		   key.put("T", new Koompa());
+		   key.put("O", null);
 	   }
 	   
 	   public void runGame(){

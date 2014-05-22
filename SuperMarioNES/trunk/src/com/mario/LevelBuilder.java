@@ -12,10 +12,11 @@ public class LevelBuilder {
 	public void importLvl(String filename){
 		try{
 		Scanner sc = new Scanner(new File(filename));
-		lvl = new String[sc.nextInt()][sc.nextInt()];
-		int numLines = sc.nextInt();
+		int rows = sc.nextInt();
+		int cols = sc.nextInt();
+		lvl = new String[rows][cols];
 		sc.nextLine();
-		for(int i = 0; i < numLines; i++){
+		for(int i = 0; i < rows; i++){
 			String line = sc.nextLine();
 			for(int a = 0; a < line.length(); a++)
 				lvl[i][a] = ""+line.charAt(a);

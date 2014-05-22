@@ -15,6 +15,10 @@ public class Mushroom extends Enemy{
     int x,y;
     int walk=0;
     int curFrame = 0; //0-1
+    
+    public Mushroom(){
+    	super(0,0);
+    }
    
      boolean yesorno=true;
      Mushroom(int x,int y,int walk)
@@ -31,10 +35,15 @@ public class Mushroom extends Enemy{
  //height=getHeight();
  //t=new Timer(1,this);
  this.walk=walk;
-    t.start();
+   // t.start();
 //setVisible(true);
     
     
+}
+     
+public void setPos(int x1, int y1){
+	x= x1;
+	y= y1;
 }
      
 public void MushroomStand(Graphics g){
