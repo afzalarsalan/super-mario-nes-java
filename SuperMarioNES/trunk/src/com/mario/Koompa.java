@@ -21,40 +21,27 @@ public class Koompa {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        // TODO code application logic here
-         JFrame j=new JFrame();
-        KoompaTrooper obj=new KoompaTrooper(100,10);
-j.setSize(obj.getSize());
-j.setBackground(Color.WHITE);
-j.add(obj);
-j.setVisible(true);
-j.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-    }
-    
-}
-
-class KoompaTrooper extends JPanel implements ActionListener{
     int x,y;
     private int red;
     private int green;
     private int blue;
+    
+    public Koompa(){
+    	
+    }
 
-    public KoompaTrooper(int x, int y){
+    public Koompa(int x, int y){
         this.x=x;
         this.y=y;
-        setSize(1000,1000);
         red = (int)(Math.random()*256);
         green = (int)(Math.random()*256);
         blue = (int)(Math.random()*256);
 
     }
-    public void paintComponent(Graphics g){
-         super.paintComponent(g);
-     //MovingLeft1(g);
-     MovingLeft2(g);
-       
-       
+    
+    public void setPos(int x1, int y1){
+    	x= x1;
+    	y=y1;
     }
 
     @Deprecated
@@ -289,11 +276,6 @@ class KoompaTrooper extends JPanel implements ActionListener{
         Graphics2D g3 = (Graphics2D) g;
         g3.setStroke(new BasicStroke(3));
         g3.drawLine(x-8,y+118,x+20,y+113);   //thick
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        
     }
     
 }
