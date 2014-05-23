@@ -8,6 +8,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.*;
@@ -173,40 +174,44 @@ public class GameFrame extends JPanel{
 		   SwingUtilities.invokeLater(new Runnable() {
 		         @Override
 		         public void run() {
-		        	StaticStuff.mario.loadImages();
+                     StaticStuff.mario.loadImages();
                      try {
                          lb = new LevelBuilder("level1.lvl");
                      } catch (IOException e) {
                          e.printStackTrace();
                      }
                      //LevelBuilder.importLvl("src/level1.lvl",lb);
-		        	loadLevel();
-		            frame1 = new JFrame("Mario");
-		      	  	frame1.addKeyListener(listener);
-		            frame1.setContentPane(new GameFrame());
-		            frame1.pack();
-		            frame1.setLocationRelativeTo(null); // center the application window
-		            frame1.setResizable(false);
-		            frame1.setSize(StaticStuff.CANVAS_WIDTH, StaticStuff.CANVAS_HEIGHT);
-		            frame1.setVisible(true);
-                    frame1.addWindowListener(new WindowAdapter() {
-                        @Override
-                        public void windowClosing(WindowEvent windowEvent) {
-                            animationThread.interrupt();
-                            MainMenu.setVisible(true);
-                            isRunning = false;
-                            try {
-                                animationThread.join();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            frame1.dispose();
-                            super.windowClosed(windowEvent);
-                        }
-                    });
-		         }
-		      }); 
-	   }
+                     loadKey();
+                     loadLevel();
+                     for(int r = 0; r < lb.rows; r++)
+                         for(int c = 0; c < lb.cols; c++)
+                             System.out.println(lvlmap[r][c]);
+                     frame1 = new JFrame("Mario");
+                     frame1.addKeyListener(listener);
+                     frame1.setContentPane(new GameFrame());
+                     frame1.pack();
+                     frame1.setLocationRelativeTo(null); // center the application window
+                     frame1.setResizable(false);
+                     frame1.setSize(StaticStuff.CANVAS_WIDTH, StaticStuff.CANVAS_HEIGHT);
+                     frame1.setVisible(true);
+                     frame1.addWindowListener(new WindowAdapter() {
+                         @Override
+                         public void windowClosing(WindowEvent windowEvent) {
+                             animationThread.interrupt();
+                             MainMenu.setVisible(true);
+                             isRunning = false;
+                             try {
+                                 animationThread.join();
+                             } catch (InterruptedException e) {
+                                 e.printStackTrace();
+                             }
+                             frame1.dispose();
+                             super.windowClosed(windowEvent);
+                         }
+                     });
+                 }
+           });
+       }
 
 	
 	   /** The Entry main method */
