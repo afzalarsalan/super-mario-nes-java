@@ -205,15 +205,6 @@ public class GameFrame extends JPanel{
 		   drawLevel(g);
 	   }
 	   
-	   public void loadKey(){
-		   key.put("M", StaticStuff.mario);
-		   key.put("X", new Brick());
-		   key.put("P", new PowerBrick());
-		   key.put("m", new Mushroom());
-		   key.put("T", new Koompa());
-		   key.put("O", null);
-	   }
-	   
 	   public void runGame(){
 		   SwingUtilities.invokeLater(new Runnable() {
 		         @Override
@@ -225,8 +216,8 @@ public class GameFrame extends JPanel{
 						// TODO Auto-generated catch block
 					}
 		        	//LevelBuilder.importLvl("src/level1.lvl",lb);
-		        	loadKey();
-		        	loadLevel();
+		        	//loadKey();
+		        	//();
 		            frame1 = new JFrame("Mario");
 		      	  	frame1.addKeyListener(listener);
 		            frame1.setContentPane(new GameFrame());
