@@ -25,6 +25,9 @@ public class GameFrame extends JPanel{
     
     public double GRAVITY = 9.8;
     public double TERMINAL = 20;
+    public static double fallrate = 0;
+    
+    public static boolean jumped = false;
 
     public GameFrame(){
         animationThread = new Thread () {
@@ -70,7 +73,23 @@ public class GameFrame extends JPanel{
 			StaticStuff.mario.frameDelay = 0;
 		//if(StaticStuff.mario.frame > 2)
 		//	StaticStuff.mario.frame = 0;
+		//if(!StaticStuff.mario.hitFloor)
+		//StaticStuff.mario.y += GRAVITY;
 		
+		  if(fallrate > TERMINAL) {
+			  fallrate = TERMINAL;
+		  }
+		  //birdy += fallrate* 0.688;
+		  if(!StaticStuff.mario.hitFloor){
+			  StaticStuff.mario.y += fallrate/6.4;
+			  fallrate += GRAVITY;
+		  }
+		  
+		  if(StaticStuff.mario.y > 498){
+			  StaticStuff.mario.y = 498;
+			  StaticStuff.mario.hitFloor = true;
+			  jumped = false;
+		  }
 		
 		if(StaticStuff.mario.walking && StaticStuff.mario.frameDelay == 9){
 			if(StaticStuff.mario.frame < 2)
@@ -113,8 +132,10 @@ public class GameFrame extends JPanel{
 					StaticStuff.mario.dir = 0;
 					StaticStuff.mario.frame++;
 				}
-				if(e.getKeyCode() == KeyEvent.VK_SPACE){
-					
+				if(e.getKeyCode() == KeyEvent.VK_SPACE && !jumped){
+					StaticStuff.mario.hitFloor = false;
+					jumped = true;
+					fallrate = -120;
 				}
 			}
 
@@ -126,7 +147,7 @@ public class GameFrame extends JPanel{
 				if(e.getKeyCode() == KeyEvent.VK_LEFT){
 					StaticStuff.mario.walking = false;
 				}
-			}  
+			}
 	   };
 	   
 	   public void drawGrid(Graphics g){
@@ -138,12 +159,30 @@ public class GameFrame extends JPanel{
 	   public void loadLevel(){
 		   lvlmap = new Object[lb.rows][lb.cols];
 		   for(int r = 0; r < lb.rows; r++)
-			   for(int c = 0; c < lb.cols; c++)
+			   for(int c = 0; c < lb.cols; c++){
 				   lvlmap[r][c] = key.get(lb.lvl[r][c]);
+				   if(lvlmap[r][c] instanceof Mario)
+				   ((Mario) lvlmap[r][c]).loadImages();
+				   
+			   }
 	   }
 	   
+	   Graphics2D g2;
 	   public void drawLevel(Graphics g){
-		   
+		   //floor
+		   g2 = (Graphics2D)g;
+		   g2.scale(0.2,0.2);
+		   Brick b = new Brick();
+		   b.y = 2740;
+		   for(int i = -100; i < 10000; i+=100){
+			   b.x = i;
+			   b.NormalBrick(g);
+		   }
+		   b.y = 2640;
+		   for(int i = -100; i < 10000; i+=100){
+			   b.x = i;
+			   b.NormalBrick(g);
+		   }
 	   }
 	   
 	   @Override
@@ -158,7 +197,8 @@ public class GameFrame extends JPanel{
 		  // StaticStuff.mario.framesRight[2].paint(g, StaticStuff.mario.framesRight[1].ca, StaticStuff.mario.x + 100, StaticStuff.mario.y);
 		  // StaticStuff.mario.framesRight[2].paint(g, StaticStuff.mario.framesRight[2].ca, StaticStuff.mario.x + 200, StaticStuff.mario.y);
 		   
-		   drawGrid(g);
+		   //drawGrid(g);
+		   drawLevel(g);
 	   }
 	   
 	   public void loadKey(){
@@ -174,44 +214,42 @@ public class GameFrame extends JPanel{
 		   SwingUtilities.invokeLater(new Runnable() {
 		         @Override
 		         public void run() {
-                     StaticStuff.mario.loadImages();
-                     try {
-                         lb = new LevelBuilder("level1.lvl");
-                     } catch (IOException e) {
-                         e.printStackTrace();
-                     }
-                     //LevelBuilder.importLvl("src/level1.lvl",lb);
-                     loadKey();
-                     loadLevel();
-                     for(int r = 0; r < lb.rows; r++)
-                         for(int c = 0; c < lb.cols; c++)
-                             System.out.println(lvlmap[r][c]);
-                     frame1 = new JFrame("Mario");
-                     frame1.addKeyListener(listener);
-                     frame1.setContentPane(new GameFrame());
-                     frame1.pack();
-                     frame1.setLocationRelativeTo(null); // center the application window
-                     frame1.setResizable(false);
-                     frame1.setSize(StaticStuff.CANVAS_WIDTH, StaticStuff.CANVAS_HEIGHT);
-                     frame1.setVisible(true);
-                     frame1.addWindowListener(new WindowAdapter() {
-                         @Override
-                         public void windowClosing(WindowEvent windowEvent) {
-                             animationThread.interrupt();
-                             MainMenu.setVisible(true);
-                             isRunning = false;
-                             try {
-                                 animationThread.join();
-                             } catch (InterruptedException e) {
-                                 e.printStackTrace();
-                             }
-                             frame1.dispose();
-                             super.windowClosed(windowEvent);
-                         }
-                     });
-                 }
-           });
-       }
+		        	StaticStuff.mario.loadImages();
+		        	try {
+						lb = new LevelBuilder("level1.lvl");
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+					}
+		        	//LevelBuilder.importLvl("src/level1.lvl",lb);
+		        	loadKey();
+		        	loadLevel();
+		            frame1 = new JFrame("Mario");
+		      	  	frame1.addKeyListener(listener);
+		            frame1.setContentPane(new GameFrame());
+		            frame1.pack();
+		            frame1.setLocationRelativeTo(null); // center the application window
+		            frame1.setResizable(false);
+		            frame1.setSize(StaticStuff.CANVAS_WIDTH, StaticStuff.CANVAS_HEIGHT);
+		            frame1.setVisible(true);
+                    frame1.addWindowListener(new WindowAdapter() {
+                        @Override
+                        public void windowClosing(WindowEvent windowEvent) {
+                            animationThread.interrupt();
+                            MainMenu.setVisible(true);
+                            isRunning = false;
+                            try {
+                                animationThread.join();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            frame1.dispose();
+                            super.windowClosed(windowEvent);
+                        }
+                    });
+		         }
+		      }); 
+	   }
+//=======
 
 	
 	   /** The Entry main method */
