@@ -36,8 +36,6 @@ public class Brick{
     
     public void NormalBrick(Graphics g){
        
-        Graphics2D g1=(Graphics2D)g;
-g1.scale(2,2);
 //brown color
 g.setColor(new Color(246,96,29));
 g.fillRect(x+110,y+10, 100, 100);
@@ -51,7 +49,7 @@ g.fillRect(x+200,y+10,10,110);
 g.fillRect(x+150,y+10,10,40);
 g.fillRect(x+100,y+50,100,10);
 g.fillRect(x+100,y+80,100,10);
-g.fillRect(x+130,x+50,10,30);
+g.fillRect(x+130,y+50,10,30);
 g.fillRect(x+170,y+50,10,30);
 g.fillRect(x+150,y+90,10,30);
 

@@ -16,7 +16,7 @@ import javax.swing.JPanel;
  *
  * @author lathasuraparaju
  */
-public class GreenPipe {
+public class GreenPipe{
 
     /**
      * @param args the command line arguments
