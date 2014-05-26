@@ -23,7 +23,7 @@ public class GameFrame extends JPanel{
     HashMap<String, Object> key = new HashMap();
     Object[][] lvlmap;
     
-    public double GRAVITY = .7;
+    public double GRAVITY = .6;
     public double TERMINAL = 20;
     public static double fallrate = 0;
     public static int DELAY = 1000/60;
@@ -139,7 +139,7 @@ public class GameFrame extends JPanel{
 				if(e.getKeyCode() == KeyEvent.VK_SPACE && !jumped){
 					StaticStuff.mario.hitFloor = false;
 					jumped = true;
-					fallrate = -15;
+					fallrate = -9;
 				}
 			}
 
