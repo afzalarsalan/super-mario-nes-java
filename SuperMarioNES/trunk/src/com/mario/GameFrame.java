@@ -23,9 +23,10 @@ public class GameFrame extends JPanel{
     HashMap<String, Object> key = new HashMap();
     Object[][] lvlmap;
     
-    public double GRAVITY = 9.8;
+    public double GRAVITY = .7;
     public double TERMINAL = 20;
     public static double fallrate = 0;
+    public static int DELAY = 1000/60;
     
     public static boolean jumped = false;
 
@@ -48,9 +49,11 @@ public class GameFrame extends JPanel{
                             update();
                             updates++;
                             delta--;
+                            repaint();
+                            frames++;
                         }
-                        repaint();
-                        frames++;
+                        //repaint();
+                        //frames++;
                         if(System.currentTimeMillis() - timer > 1000) {
                             timer += 1000;
                             System.out.println(updates + "ups, " + frames + " fps");
@@ -81,7 +84,8 @@ public class GameFrame extends JPanel{
 		  }
 		  //birdy += fallrate* 0.688;
 		  if(!StaticStuff.mario.hitFloor){
-			  StaticStuff.mario.y += fallrate/6.4;
+			  StaticStuff.mario.y += fallrate;
+              //StaticStuff.mario.x += 5;
 			  fallrate += GRAVITY;
 		  }
 		  
@@ -135,7 +139,7 @@ public class GameFrame extends JPanel{
 				if(e.getKeyCode() == KeyEvent.VK_SPACE && !jumped){
 					StaticStuff.mario.hitFloor = false;
 					jumped = true;
-					fallrate = -120;
+					fallrate = -15;
 				}
 			}
 
