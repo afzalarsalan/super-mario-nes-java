@@ -1,5 +1,5 @@
 
-// Created by 741638 on 5/19/2014.
+/*// Created by 741638 on 5/19/2014.
 
 import com.mario.ImageHelper;
 
@@ -79,5 +79,5 @@ class MushroomPower {
         m1.paint(g, m1, 100, 100);
 
     }
-}
+}*/
 
