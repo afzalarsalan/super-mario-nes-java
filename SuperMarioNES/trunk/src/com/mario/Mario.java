@@ -1,6 +1,7 @@
 package com.mario;
 
 import java.awt.Rectangle;
+import java.util.ArrayList;
 
 public class Mario {
 	Rectangle collisionbox = new Rectangle();
@@ -19,14 +20,15 @@ public class Mario {
 	int maxVel = 10;
 	boolean walking;
 	int frameDelay = 1;
+	ArrayList<Powerup> powerups = new ArrayList();
 	
 	public Mario(int x1, int y1){
 		x = x1; y = y1;
-		collisionbox.setRect(x,y, 60, 60);
+		collisionbox.setRect(x,y, 16, 16);
 	}
 	
 	public void update(){
-		collisionbox.setRect(x,y, 60, 60);
+		collisionbox.setRect(x,y, 16, 16);
 	}
 	
 	public void loadImages(){

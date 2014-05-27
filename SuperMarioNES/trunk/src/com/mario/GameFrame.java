@@ -61,7 +61,7 @@ public class GameFrame extends JPanel{
                         //frames++;
                         if(System.currentTimeMillis() - timer > 1000) {
                             timer += 1000;
-                            System.out.println(updates + "ups, " + frames + " fps");
+                            //System.out.println(updates + "ups, " + frames + " fps");
                             frame1.setTitle("SuperMarioNES" + " | " + updates + "ups, " + frames + " fps");
                             updates = 0;
                             frames = 0;
@@ -77,8 +77,14 @@ public class GameFrame extends JPanel{
 	
 	public void update(){
 		//mario code
+		if(StaticStuff.startSpin){
+			Powerup p = StaticStuff.powerups.get((int)(Math.random() * 3));
+			StaticStuff.mario.powerups.add(p);
+			System.out.println(p);
+			StaticStuff.startSpin = false;
+		}
 		
-		System.out.println(StaticStuff.mario.collisionbox.x + " " + StaticStuff.mario.x);
+		//System.out.println(StaticStuff.mario.collisionbox.x + " " + StaticStuff.mario.x);
 		if(cnt == 1000){
 			int x = (int)(Math.random()*720 + 30);
 			fallingPowerups.add(new PowerBrick(x, 50));
@@ -183,8 +189,8 @@ public class GameFrame extends JPanel{
 	   
 	   Graphics2D g2;
 	   
-	   GreenPipe g1 = new GreenPipe(40,1325);
-	   GreenPipe g3 = new GreenPipe(1940,1325);
+	   GreenPipe g1 = new GreenPipe(30,1060);
+	   GreenPipe g3 = new GreenPipe(1560,1060);
 	   
 	   public void drawLevel(Graphics g){
 		   //floor
@@ -201,9 +207,12 @@ public class GameFrame extends JPanel{
 			   b.x = i;
 			   b.NormalBrick(g);
 		   }
-		   g2.scale(2, 2);
+		   g2.scale(5, 5);
+		   g2.scale(.5, .5);
 		   g1.GreenPipe(g);
 		   g3.GreenPipe(g);
+		   g2.scale(2,2);
+		   //g2.
 	   }
 	   
 	   @Override
@@ -223,13 +232,12 @@ public class GameFrame extends JPanel{
 		   for(PowerBrick pb : fallingPowerups){
 				pb.StarBrick(g);
 		   }
-		   if(StaticStuff.startSpin){
-			   System.out.println("shit");
-			   g.setColor(Color.BLACK);
-			   g.fillRect(400,400,100,100);
-		   }
+		//   if(StaticStuff.startSpin){
+			  // g.setColor(Color.BLACK);
+			   //g.fillRect(400,400,100,100);
+		 //  }
 		   
-		   g.fillRect(StaticStuff.mario.collisionbox.x, StaticStuff.mario.collisionbox.y, 60, 60);
+		   //g.fillRect(StaticStuff.mario.collisionbox.x, StaticStuff.mario.collisionbox.y, 20, 30);
 	   }
 	   
 	   public void runGame(){
@@ -239,6 +247,9 @@ public class GameFrame extends JPanel{
 		        	//LevelBuilder.importLvl("src/level1.lvl",lb);
 		        	//loadKey();
 		        	//();
+		        	 StaticStuff.powerups.add(new Star());
+		        	 StaticStuff.powerups.add(new MushroomPower());
+		        	 StaticStuff.powerups.add(new Coin());
 		            frame1 = new JFrame("Mario");
 		      	  	frame1.addKeyListener(listener);
 		            frame1.setContentPane(new GameFrame());

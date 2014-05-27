@@ -7,9 +7,7 @@ public class MushroomPower extends Powerup{
 		int x, y;
 	    ImageHelper m1 = new ImageHelper();
 
-	    MushroomPower(int x1, int y1) {
-	    	x = x1;
-	    	y = y1;
+	    MushroomPower() {
 	    }
 
 	    public void loadImages() {
@@ -60,8 +58,12 @@ public class MushroomPower extends Powerup{
 	                "92), (197:156:92), (197:156:92), (197:156:92), null, null, null, null, null");
 	    }
 
-	    public void draw(Graphics g) {
-	        m1.paint(g, m1.ca, 100, 100);
+	    public void draw(Graphics g, int x, int y) {
+	        m1.paint(g, m1.ca, x, y);
 
 	    }
+	    
+		public String toString(){
+			return "MushroomPower";
+		}
 	}
