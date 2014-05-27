@@ -16,72 +16,24 @@ import java.awt.event.ActionListener;
  *
  * @author nithinkuchibotla
  */
-public class Star   {
+public class Star extends Powerup{
    
-    
-    /**
-     * @param args the command line arguments
-     */
-   
-    public static void main(String[] args) {
-        // TODO code application logic here
-         MarioStar panel = new MarioStar(300,90);  
-         
-        MarioStar p=new MarioStar(400,90);
-        JFrame application = new JFrame();                            // the program itself
-        application.setBackground(Color.WHITE);
-        application.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);   // set frame to exit
-                                                                      // when it is closed
-        application.add(panel);           
-application.add(p);
-
-        application.setSize(800, 800);         // window is 500 pixels wide, 400 high
-        application.setVisible(true); 
-    }
-
-    
-
-   
-    
-}
-class MarioStar extends JPanel implements ActionListener{
      private int width,height;
   private int velX=2,velY=2;
   int i=0, x,y;
      
     private Timer t;
-    MarioStar(int x,int y){
-        
-        setBackground(Color.WHITE);
-        width=getWidth();
-         height=getHeight();
-        t=new Timer(1,this);
+    Star(int x,int y){
      this.x=x;
      this.y=y;
-        t.start();
-        
-        
     }
-    public void paintComponent(Graphics g){
-         super.paintComponent(g);
-         try{
-         Thread.sleep(100L);
-       star(g);
-         }
-        catch (InterruptedException ex) {
-             System.out.println("fasd");
-         }
-       
-       
-    }
-    public void star(Graphics g){
-         Graphics2D g1=(Graphics2D)g;
-         g1.scale(0.25,0.25);
+    Graphics2D g2;
+    public void draw(Graphics g){
         int r=(int)(Math.random()*226);
         int f=(int)(Math.random()*226);
         int b=(int)(Math.random()*226);
-    	Graphics2D g2 = (Graphics2D)g;
-    	g2.scale(2, 2);
+    	//g2 = (Graphics2D)g;
+    	//g2.scale(2, 2);
    
         g.setColor(Color.BLACK);
     // Outline
@@ -153,40 +105,5 @@ class MarioStar extends JPanel implements ActionListener{
                 g.fillRect(x+20,y+60,8,13);//1
                  g.fillRect(x-10,y+60,8,13);//2
     }
-
-    
-     @Override
-    public void actionPerformed(ActionEvent e) {
-        
-      
-
-i++;
-         try {
-             Thread.sleep(100L);
-         
-        if (i%2==0 ) {
-            
-           x += 60;
-        y -= 500;
-             
-        }
-        else{
-             
-             x += 60;
-        y += 500;
-             
-            
-        }
-         }
-         catch (InterruptedException ex) {
-             System.out.println("fasd");
-         }
-
-
-       
-     repaint(); 
-         
-    }
-    
     
 }

@@ -21,37 +21,16 @@ public class GreenPipe{
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        JFrame j=new JFrame();
-        Pipe obj=new Pipe(500,1000);
-j.setSize(obj.getSize());
-j.setBackground(Color.WHITE);
-j.add(obj);
-j.setVisible(true);
-j.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-    }
-    
-}
-class Pipe extends JPanel {
     int width,height;
     int x,y;
-    Pipe(int x,int y){
+    GreenPipe(int x,int y){
         this.x=x;
         this.y=y;
-           setSize(1000,1000);
-        width=getWidth();
-     height=getHeight();
-    
- setVisible(true);
     }
-public void paintComponent(Graphics g){
-    super.paintComponent(g);
-    GreenPipe(g);
-}
+    
 public void GreenPipe(Graphics g){
     Graphics2D g1=(Graphics2D)g;
-    g1.scale(0.5, 0.5);
+    //g1.scale(2, 2);
     g.setColor(new Color(86,254,4));
     g.fillRect(x,y-300,10,300);
     g.setColor(new Color(85,210,2));

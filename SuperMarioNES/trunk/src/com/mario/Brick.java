@@ -9,11 +9,14 @@ package com.mario;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 public class Brick{
+	Rectangle collisionBox = new Rectangle();
     int width,height;
      int x,y;
      boolean hit = false;
@@ -25,6 +28,11 @@ public class Brick{
     Brick(int x,int y){
          this.x=x;
          this.y=y;
+         collisionBox.setRect(x,y,100,100);
+    }
+    
+    public void update(){
+    	collisionBox.setRect(x,y,100,100);
     }
     
     public void draw(Graphics g){
@@ -38,20 +46,20 @@ public class Brick{
        
 //brown color
 g.setColor(new Color(246,96,29));
-g.fillRect(x+110,y+10, 100, 100);
+g.fillRect(x+10,y+10, 100, 100);
 //outside
 g.setColor(Color.BLACK);
-g.fillRect(x+110,y+10,100,10);
-g.fillRect(x+100,y+10,10,100);
-g.fillRect(x+100,y+110,100,10);
-g.fillRect(x+200,y+10,10,110);
+g.fillRect(x+10,y+10,100,10);
+g.fillRect(x,y+10,10,100);
+g.fillRect(x,y+110,100,10);
+g.fillRect(x+100,y+10,10,110);
 //inside
-g.fillRect(x+150,y+10,10,40);
-g.fillRect(x+100,y+50,100,10);
-g.fillRect(x+100,y+80,100,10);
-g.fillRect(x+130,y+50,10,30);
-g.fillRect(x+170,y+50,10,30);
-g.fillRect(x+150,y+90,10,30);
+g.fillRect(x+50,y+10,10,40);
+g.fillRect(x,y+50,100,10);
+g.fillRect(x,y+80,100,10);
+g.fillRect(x+30,y+50,10,30);
+g.fillRect(x+70,y+50,10,30);
+g.fillRect(x+50,y+90,10,30);
 
             }
     public void BrickWhenFinishedCollision(Graphics g){
