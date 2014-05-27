@@ -10,9 +10,21 @@ public class PowerBrick extends Brick{
 		super(x,y);
 	}
 	
+	public void update(){
+		if(collisionBox.intersects(StaticStuff.mario.collisionbox))
+			hit = true;
+		y+=3;
+		collisionBox.setRect(x,y, 100, 100);
+		
+		if(hit){
+			collisionBox.setRect(0,0, 0, 0);
+			StaticStuff.startSpin = true;
+		}
+	}
+	Graphics2D rect;
 	public void StarBrick(Graphics g){
-	    Graphics2D rect=(Graphics2D)g;
-	        rect.scale(1, 1);
+	   // rect =(Graphics2D)g;
+	   // rect.scale(.7, .7);
 	    g.setColor(Color.BLACK);
 	    g.fillRect(x,y,8,8);
 	    g.setColor(new Color(245,152,37));

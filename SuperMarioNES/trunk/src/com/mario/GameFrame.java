@@ -1,8 +1,11 @@
 package com.mario;
 
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
@@ -22,6 +25,8 @@ public class GameFrame extends JPanel{
     public LevelBuilder lb;
     HashMap<String, Object> key = new HashMap();
     Object[][] lvlmap;
+    ArrayList<Brick> fallingBricks = new ArrayList();
+    ArrayList<PowerBrick> fallingPowerups = new ArrayList();
     
     public double GRAVITY = .6;
     public double TERMINAL = 20;
@@ -67,9 +72,20 @@ public class GameFrame extends JPanel{
         };
         animationThread.start();  // start the thread to run animation
     }
+    
+    int cnt = 0;
 	
 	public void update(){
 		//mario code
+		
+		System.out.println(StaticStuff.mario.collisionbox.x + " " + StaticStuff.mario.x);
+		if(cnt == 1000){
+			int x = (int)(Math.random()*720 + 30);
+			fallingPowerups.add(new PowerBrick(x, 50));
+			cnt = 0;
+		}
+		cnt++;
+		
 		if(!StaticStuff.mario.walking)
 			StaticStuff.mario.frame = 1;
 		if(StaticStuff.mario.frameDelay > 9)
@@ -94,6 +110,8 @@ public class GameFrame extends JPanel{
 			  StaticStuff.mario.hitFloor = true;
 			  jumped = false;
 		  }
+		  
+		  
 		
 		if(StaticStuff.mario.walking && StaticStuff.mario.frameDelay == 9){
 			if(StaticStuff.mario.frame < 2)
@@ -103,13 +121,16 @@ public class GameFrame extends JPanel{
 		}
 		
 		if(StaticStuff.mario.walking){
-			if(StaticStuff.mario.dir == 1)
+			if(StaticStuff.mario.dir == 1  && StaticStuff.mario.x < 742)
 				StaticStuff.mario.x+=2;
-			else
+			else if(StaticStuff.mario.dir == 0  && StaticStuff.mario.x > 31)
 				StaticStuff.mario.x-=2;
 		}
 		StaticStuff.mario.frameDelay++;
 		
+		StaticStuff.mario.update();
+		for(PowerBrick pb : fallingPowerups)
+			pb.update();
 		
 	}
 
@@ -139,7 +160,7 @@ public class GameFrame extends JPanel{
 				if(e.getKeyCode() == KeyEvent.VK_SPACE && !jumped){
 					StaticStuff.mario.hitFloor = false;
 					jumped = true;
-					fallrate = -9;
+					fallrate = -12;
 				}
 			}
 
@@ -160,42 +181,38 @@ public class GameFrame extends JPanel{
 				   g.drawRect(r, c, 20, 20);
 	   }
 	   
-	   public void loadLevel(){
-		   lvlmap = new Object[lb.rows][lb.cols];
-		   for(int r = 0; r < lb.rows; r++)
-			   for(int c = 0; c < lb.cols; c++){
-				   lvlmap[r][c] = key.get(lb.lvl[r][c]);
-				   if(lvlmap[r][c] instanceof Mario)
-				   ((Mario) lvlmap[r][c]).loadImages();
-				   
-			   }
-	   }
-	   
 	   Graphics2D g2;
+	   
+	   GreenPipe g1 = new GreenPipe(40,1325);
+	   GreenPipe g3 = new GreenPipe(1940,1325);
+	   
 	   public void drawLevel(Graphics g){
 		   //floor
 		   g2 = (Graphics2D)g;
 		   g2.scale(0.2,0.2);
 		   Brick b = new Brick();
 		   b.y = 2740;
-		   for(int i = -100; i < 10000; i+=100){
+		   for(int i = 0; i < 10000; i+=100){
 			   b.x = i;
 			   b.NormalBrick(g);
 		   }
 		   b.y = 2640;
-		   for(int i = -100; i < 10000; i+=100){
+		   for(int i = 0; i < 10000; i+=100){
 			   b.x = i;
 			   b.NormalBrick(g);
 		   }
+		   g2.scale(2, 2);
+		   g1.GreenPipe(g);
+		   g3.GreenPipe(g);
 	   }
 	   
 	   @Override
 	   public void paintComponent(Graphics g){
 		   g.clearRect(0, 0, 800, 600);
 		   if(StaticStuff.mario.dir == 1)
-			   StaticStuff.mario.framesRight[StaticStuff.mario.frame].paint(g, StaticStuff.mario.framesRight[StaticStuff.mario.frame].ca, StaticStuff.mario.x, StaticStuff.mario.y);
+			   StaticStuff.mario.framesRight[StaticStuff.mario.frame].paint(g, StaticStuff.mario.framesRight[StaticStuff.mario.frame].ca, StaticStuff.mario.collisionbox.x, StaticStuff.mario.collisionbox.y);
 		   else
-			   StaticStuff.mario.framesLeft[StaticStuff.mario.frame].paint(g, StaticStuff.mario.framesLeft[StaticStuff.mario.frame].ca2, StaticStuff.mario.x, StaticStuff.mario.y);
+			   StaticStuff.mario.framesLeft[StaticStuff.mario.frame].paint(g, StaticStuff.mario.framesLeft[StaticStuff.mario.frame].ca2, StaticStuff.mario.collisionbox.x, StaticStuff.mario.collisionbox.y);
 		  
 		   // StaticStuff.mario.framesRight[2].paint(g, StaticStuff.mario.framesRight[0].ca, StaticStuff.mario.x, StaticStuff.mario.y);
 		  // StaticStuff.mario.framesRight[2].paint(g, StaticStuff.mario.framesRight[1].ca, StaticStuff.mario.x + 100, StaticStuff.mario.y);
@@ -203,18 +220,22 @@ public class GameFrame extends JPanel{
 		   
 		   //drawGrid(g);
 		   drawLevel(g);
+		   for(PowerBrick pb : fallingPowerups){
+				pb.StarBrick(g);
+		   }
+		   if(StaticStuff.startSpin){
+			   System.out.println("shit");
+			   g.setColor(Color.BLACK);
+			   g.fillRect(400,400,100,100);
+		   }
+		   
+		   g.fillRect(StaticStuff.mario.collisionbox.x, StaticStuff.mario.collisionbox.y, 60, 60);
 	   }
 	   
 	   public void runGame(){
 		   SwingUtilities.invokeLater(new Runnable() {
 		         @Override
 		         public void run() {
-		        	StaticStuff.mario.loadImages();
-		        	try {
-						lb = new LevelBuilder("level1.lvl");
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-					}
 		        	//LevelBuilder.importLvl("src/level1.lvl",lb);
 		        	//loadKey();
 		        	//();
