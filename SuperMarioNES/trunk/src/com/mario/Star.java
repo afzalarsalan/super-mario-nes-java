@@ -18,17 +18,10 @@ import java.awt.event.ActionListener;
  */
 public class Star extends Powerup{
    
-     private int width,height;
-  private int velX=2,velY=2;
-  int i=0, x,y;
-     
-    private Timer t;
-    Star(int x,int y){
-     this.x=x;
-     this.y=y;
+    Star(){
     }
     Graphics2D g2;
-    public void draw(Graphics g){
+    public void draw(Graphics g, int x, int y){
         int r=(int)(Math.random()*226);
         int f=(int)(Math.random()*226);
         int b=(int)(Math.random()*226);
@@ -105,5 +98,9 @@ public class Star extends Powerup{
                 g.fillRect(x+20,y+60,8,13);//1
                  g.fillRect(x-10,y+60,8,13);//2
     }
+    
+	public String toString(){
+		return "Star";
+	}
     
 }
