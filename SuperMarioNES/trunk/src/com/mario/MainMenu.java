@@ -52,6 +52,15 @@ public class MainMenu {
                 frame.setVisible(false);
             }
         });
+        buttonTransparentButton1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent mouseEvent) {
+                HelpMenu dialog = new HelpMenu();
+                dialog.pack();
+                dialog.setVisible(true);
+                super.mouseClicked(mouseEvent);
+            }
+        });
     }
 
     private void createUIComponents() {
