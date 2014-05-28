@@ -3,11 +3,13 @@ package com.mario;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
 import javax.swing.Timer;
 
-public class Mushroom extends Enemy{
+public class Mushroom{
 
+	Rectangle collisionbox = new Rectangle();
 	int width, height;
     int i=0,j=1;
     int r=0;
@@ -17,14 +19,14 @@ public class Mushroom extends Enemy{
     int curFrame = 0; //0-1
     
     public Mushroom(){
-    	super(0,0);
+    	//super(0,0);
     }
    
      boolean yesorno=true;
-     Mushroom(int x,int y,int walk)
+     Mushroom(int x,int y)
      	{
     	 	// to visible the frame
-    	 	super(x,y);
+    	 	//super(x,y);
 
     	 	//to set the size
     	 	this.x=x;
@@ -34,7 +36,6 @@ public class Mushroom extends Enemy{
     //width=getWidth();
  //height=getHeight();
  //t=new Timer(1,this);
- this.walk=walk;
    // t.start();
 //setVisible(true);
     
@@ -45,11 +46,10 @@ public void setPos(int x1, int y1){
 	x= x1;
 	y= y1;
 }
-     
+     Graphics2D g2;
 public void MushroomStand(Graphics g){
-Graphics2D g2 = (Graphics2D)g;
-	g2.scale(1, 1);
-   
+	//g2 = (Graphics2D)g;
+	//g2.scale(1, 1);
      
 //head
 g.setColor(new Color(104, 56, 38));
@@ -98,8 +98,8 @@ g.fillRect(x,y,30,8);
                                             g.fillRect(x+20,y+58,10,16);
 }
 public void MushroomRight(Graphics g){
-Graphics2D g2 = (Graphics2D)g;
-	g2.scale(0.25, 0.25);
+	//g2 = (Graphics2D)g;
+	//g2.scale(0.25, 0.25);
 
 //head
   
@@ -149,10 +149,12 @@ g.fillRect(x,y,30,8);
 					    g.fillRect(x+40,y+40,10,30);
                                             g.fillRect(x+20,y+65,30,10);
                                             g.fillRect(x+20,y+58,10,16);
+                                            
+                                          //  g2.scale(4, 4);
 }
 public void MushroomLeft(Graphics g){
-Graphics2D g2 = (Graphics2D)g;
- g2.scale(0.25, 0.25);
+// g2 = (Graphics2D)g;
+// g2.scale(0.25, 0.25);
 
          
 //head
@@ -200,11 +202,28 @@ g.fillRect(x,y,30,8);
 					    g.fillRect(x+40,y+40,10,30);
                                             g.fillRect(x+20,y+65,30,10);
                                             g.fillRect(x+20,y+58,10,16);                                         g.fillRect((width/2)+20,(height/2)+58,10,16);
+                                           // g2.scale(4, 4);
 }
-@Override
-public void move() {
-	// TODO Auto-generated method stub
-	
+
+int dir = 2;
+
+public void update() {
+	if(x < 742)
+		x+=dir;
+	if(x > 31)
+		x-=dir;
+	if(x > 742 || x < 31)
+		dir = -dir;
+		
+	collisionbox.setRect(x,y,20,30);
+	curFrame++;
+}
+
+public void draw(Graphics g){
+	if(curFrame == 0)
+		MushroomLeft(g);
+	else
+		MushroomRight(g);
 }
 
 }

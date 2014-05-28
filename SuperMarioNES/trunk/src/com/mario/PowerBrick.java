@@ -6,27 +6,36 @@ import java.awt.Graphics2D;
 
 public class PowerBrick extends Brick{
 	
+	int originaly = y;
+	boolean releasepower = false;
+	int cnt = 0;
+	
 	public PowerBrick(int x, int y){
 		super(x,y);
+		originaly = y;
 	}
 	
 	boolean checked = false;
 	
 	public void update(){
-		
-		y+=1;
 		collisionBox.setRect(x,y, 25, 25);
 		
 		if(hit && !checked){
 			collisionBox.setRect(0,0, 0, 0);
-			StaticStuff.startSpin = true;
+			releasepower = true;
+			//StaticStuff.startSpin = true;
 			checked = true;
 		}
-		if(collisionBox.intersects(StaticStuff.mario.collisionbox))
-			hit = true;
+		if(collides())
+			if(bottom())
+				hit = true;
+		if(releasepower)
+		{
+			//draw the power from the top
+		}
 	}
 	Graphics2D rect;
-	public void StarBrick(Graphics g){
+	public void draw(Graphics g){
 		if(!hit){
 	    //rect =(Graphics2D)g;
 	    //rect.scale(.5, .5);

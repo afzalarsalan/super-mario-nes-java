@@ -28,6 +28,10 @@ public class GreenPipe{
         this.y=y;
     }
     
+    public void update(){
+    	
+    }
+    
 public void GreenPipe(Graphics g){
     Graphics2D g1=(Graphics2D)g;
     //g1.scale(2, 2);
