@@ -24,11 +24,11 @@ public class Mario {
 	
 	public Mario(int x1, int y1){
 		x = x1; y = y1;
-		collisionbox.setRect(x,y, 16, 16);
+		collisionbox.setRect(x+6,y, 14, 30);
 	}
 	
 	public void update(){
-		collisionbox.setRect(x,y, 16, 16);
+		collisionbox.setRect(x+6,y, 14, 30);
 	}
 	
 	public void loadImages(){

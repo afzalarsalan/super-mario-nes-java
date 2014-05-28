@@ -26,13 +26,15 @@ public class GameFrame extends JPanel{
     HashMap<String, Object> key = new HashMap();
     Object[][] lvlmap;
     ArrayList<Brick> fallingBricks = new ArrayList();
-    ArrayList<PowerBrick> fallingPowerups = new ArrayList();
+    ArrayList<Brick> level = new ArrayList();
+    ArrayList<Mushroom> mushrooms = new ArrayList();
     
     public double GRAVITY = .6;
     public double TERMINAL = 20;
     public static double fallrate = 0;
     public static int DELAY = 1000/60;
     
+    public static boolean scrollmode = false;
     public static boolean jumped = false;
 
     public GameFrame(){
@@ -70,10 +72,22 @@ public class GameFrame extends JPanel{
                 }
             }
         };
+        loadLevel();
         animationThread.start();  // start the thread to run animation
     }
     
+    public void loadLevel(){
+    	level.add(new Brick(100, 510));
+    	level.add(new Brick(120, 510));
+    	level.add(new Brick(140, 510));
+    	level.add(new Brick(160, 510));
+    	level.add(new Brick(160, 490));
+    	//level.add(new PowerBrick(125, 420));
+    	//level.add(new PowerBrick(150, 420));
+    }
+    
     int cnt = 0;
+    int cnt2 = 0;
 	
 	public void update(){
 		//mario code
@@ -85,12 +99,20 @@ public class GameFrame extends JPanel{
 		}
 		
 		//System.out.println(StaticStuff.mario.collisionbox.x + " " + StaticStuff.mario.x);
-		if(cnt == 1000){
-			int x = (int)(Math.random()*720 + 30);
-			fallingPowerups.add(new PowerBrick(x, 50));
-			cnt = 0;
-		}
-		cnt++;
+		//if(cnt == 1000){
+			//cnt = 0;
+		//}
+		
+		//if(cnt2 == 500){
+		//	int side = (int)(Math.random()*2);
+		//	if(side == 0)
+		//		mushrooms.add(new Mushroom(50, 500));
+		//	else
+		//		mushrooms.add(new Mushroom(600, 500));
+		//}
+		
+		//cnt++;
+		//cnt2++;
 		
 		if(!StaticStuff.mario.walking)
 			StaticStuff.mario.frame = 1;
@@ -110,14 +132,12 @@ public class GameFrame extends JPanel{
               //StaticStuff.mario.x += 5;
 			  fallrate += GRAVITY;
 		  }
-		  
-		  if(StaticStuff.mario.y > 498){
-			  StaticStuff.mario.y = 498;
-			  StaticStuff.mario.hitFloor = true;
-			  jumped = false;
+			  if(StaticStuff.mario.y > 498){
+				  StaticStuff.mario.y = 498;
+				  StaticStuff.mario.hitFloor = true;
 		  }
-		  
-		  
+			  if(StaticStuff.mario.hitFloor)
+				  jumped = false;
 		
 		if(StaticStuff.mario.walking && StaticStuff.mario.frameDelay == 9){
 			if(StaticStuff.mario.frame < 2)
@@ -127,17 +147,31 @@ public class GameFrame extends JPanel{
 		}
 		
 		if(StaticStuff.mario.walking){
-			if(StaticStuff.mario.dir == 1  && StaticStuff.mario.x < 742)
+			if(scrollmode){
+			if(StaticStuff.mario.dir == 1  && StaticStuff.mario.x < 400)
 				StaticStuff.mario.x+=2;
-			else if(StaticStuff.mario.dir == 0  && StaticStuff.mario.x > 31)
+			else if(tempx < 0 && StaticStuff.mario.dir == 0  && StaticStuff.mario.x > 398)
 				StaticStuff.mario.x-=2;
+			else if(tempx == 8 && StaticStuff.mario.dir == 0 && StaticStuff.mario.x > 30)
+				StaticStuff.mario.x-=4;
+			}else{
+				if(StaticStuff.mario.dir == 1  && StaticStuff.mario.x < 742)
+					StaticStuff.mario.x+=2;
+				else if(StaticStuff.mario.dir == 0  && StaticStuff.mario.x > 30)
+					StaticStuff.mario.x-=2;
+			}
+			//else
+			//if(tempx >= 0 && StaticStuff.mario.dir == 0  && StaticStuff.mario.x > 30)
+			//	StaticStuff.mario.x-=2;
+			
 		}
 		StaticStuff.mario.frameDelay++;
 		
 		StaticStuff.mario.update();
-		for(PowerBrick pb : fallingPowerups)
+		for(Brick pb : level)
 			pb.update();
-		
+		for(Mushroom m : mushrooms)
+			m.update();
 	}
 
     public void stop(){
@@ -192,27 +226,47 @@ public class GameFrame extends JPanel{
 	   GreenPipe g1 = new GreenPipe(30,1060);
 	   GreenPipe g3 = new GreenPipe(1560,1060);
 	   
+	   static int tempx = 0;
+	   
 	   public void drawLevel(Graphics g){
 		   //floor
-		   g2 = (Graphics2D)g;
-		   g2.scale(0.2,0.2);
+		   //g2 = (Graphics2D)g;
+		  // g2.scale(0.2,0.2);
 		   Brick b = new Brick();
-		   b.y = 2740;
-		   for(int i = 0; i < 10000; i+=100){
-			   b.x = i;
-			   b.NormalBrick(g);
+		   b.y = 530;
+		   if(scrollmode){
+		   if(StaticStuff.mario.x >= 400 && StaticStuff.mario.walking)
+			   tempx-=8;
+		   if(tempx <= 0 && StaticStuff.mario.x <= 398 && StaticStuff.mario.walking)
+			   tempx+=8;
 		   }
-		   b.y = 2640;
-		   for(int i = 0; i < 10000; i+=100){
+		   //System.out.println(tempx);
+		   if(scrollmode){
+		   for(int i = tempx; i < 10000; i+=100){
 			   b.x = i;
-			   b.NormalBrick(g);
+			   b.draw(g);
 		   }
-		   g2.scale(5, 5);
-		   g2.scale(.5, .5);
-		   g1.GreenPipe(g);
-		   g3.GreenPipe(g);
-		   g2.scale(2,2);
-		   //g2.
+		   b.y = 518;
+		   for(int i = tempx; i < 10000; i+=100){
+			   b.x = i;
+			   b.draw(g);
+		   }
+		   }else{
+			   for(int i = 0; i < 790; i+=20){
+				   b.x = i;
+				   b.draw(g);
+			   }
+			   b.y = 550;
+			   for(int i = 0; i < 790; i+=20){
+				   b.x = i;
+				   b.draw(g);
+			   }
+		   }
+		 //  g2.scale(5, 5);
+		   //g2.scale(.5, .5);
+		  // g1.GreenPipe(g);
+		  // g3.GreenPipe(g);
+		  // g2.scale(2,2);
 	   }
 	   
 	   @Override
@@ -229,15 +283,29 @@ public class GameFrame extends JPanel{
 		   
 		   //drawGrid(g);
 		   drawLevel(g);
-		   for(PowerBrick pb : fallingPowerups){
-				pb.StarBrick(g);
+		   for(Brick pb : level){
+				pb.draw(g);
+				//g.fillRect(pb.collisionbox.x,pb.collisionbox.y,20, 20);
 		   }
+		   for(Mushroom m : mushrooms){
+			   m.draw(g);
+			   g.fillRect(m.collisionbox.x+6,m.collisionbox.y,14,30);
+		   }
+		   
+		   MushroomPower p = new MushroomPower();
+		   p.draw(g, 50, 50);
+		   
 		//   if(StaticStuff.startSpin){
 			  // g.setColor(Color.BLACK);
 			   //g.fillRect(400,400,100,100);
 		 //  }
 		   
-		   //g.fillRect(StaticStuff.mario.collisionbox.x, StaticStuff.mario.collisionbox.y, 20, 30);
+		   //g.fillRect(StaticStuff.mario.collisionbox.x+6, StaticStuff.mario.collisionbox.y, 14, 30);
+	   }
+	   
+	   public void loadImgs(){
+		   	 StaticStuff.brickim.setDim(11, 11, 2);
+		   	 StaticStuff.brickim.parse("(0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (105:61:26), (105:61:26), (105:61:26), (0:0:0), (105:61:26), (105:61:26), (105:61:26), (105:61:26), (105:61:26), (0:0:0), (0:0:0), (105:61:26), (105:61:26), (105:61:26), (0:0:0), (105:61:26), (105:61:26), (105:61:26), (105:61:26), (105:61:26), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (105:61:26), (0:0:0), (105:61:26), (105:61:26), (105:61:26), (105:61:26), (0:0:0), (105:61:26), (105:61:26), (0:0:0), (0:0:0), (105:61:26), (0:0:0), (105:61:26), (105:61:26), (105:61:26), (105:61:26), (0:0:0), (105:61:26), (105:61:26), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (105:61:26), (105:61:26), (105:61:26), (105:61:26), (0:0:0), (105:61:26), (105:61:26), (105:61:26), (105:61:26), (0:0:0), (0:0:0), (105:61:26), (105:61:26), (105:61:26), (105:61:26), (0:0:0), (105:61:26), (105:61:26), (105:61:26), (105:61:26), (0:0:0), (0:0:0), (105:61:26), (105:61:26), (105:61:26), (105:61:26), (0:0:0), (105:61:26), (105:61:26), (105:61:26), (105:61:26), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0)");
 	   }
 	   
 	   public void runGame(){
@@ -247,6 +315,8 @@ public class GameFrame extends JPanel{
 		        	//LevelBuilder.importLvl("src/level1.lvl",lb);
 		        	//loadKey();
 		        	//();
+		        	// int x = (int)(Math.random()*720 + 30);
+		        	 loadImgs();
 		        	 StaticStuff.powerups.add(new Star());
 		        	 StaticStuff.powerups.add(new MushroomPower());
 		        	 StaticStuff.powerups.add(new Coin());
