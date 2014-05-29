@@ -224,10 +224,13 @@ public void update() {
 		x+=dir;
 		if(x > 752 || x < 31)
 			dir = -dir;
-		if(collides(StaticStuff.mario))
-			StaticStuff.mario.dead = true;
+		if(collides(StaticStuff.mario)){
+			StaticStuff.gameOver = true;
+			//StaticStuff.mario.dead = true;
+		}
 		for(Bullet b : GameFrame.bullets)
 			if(collides(b)){
+				dead = true;
 				dead = true;
 				b.dead = true;
 				GameFrame.score+=100;
@@ -237,7 +240,7 @@ public void update() {
 		curFrame++;
 		frameDelay++;
 	}else
-		collisionbox.setRect(0,0,0,0);
+		collisionbox.setRect(-50,-50,0,0);
 }
 
 public void draw(Graphics g){
