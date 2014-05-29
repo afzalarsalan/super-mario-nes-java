@@ -102,6 +102,7 @@ public class GameFrame extends JPanel{
     	else
     		mushrooms.add(new Mushroom(740, 513));
     }
+    Peach p = new Peach(10,320);
     
     //Mushroom m = new Mushroom(500,513);
 	
@@ -113,6 +114,8 @@ public class GameFrame extends JPanel{
 			if(spawnRate < 450)
 				spawnRate++;
 		}
+		
+		
 	
 		//mario code
 		if(StaticStuff.startSpin){
@@ -318,6 +321,7 @@ public class GameFrame extends JPanel{
 		   c2.draw(g);
 		   c3.draw(g);
 		   c4.draw(g);
+		   p.draw(g);
 		   if(StaticStuff.mario.dir == 1)
 			   StaticStuff.mario.framesRight[StaticStuff.mario.frame].paint(g, StaticStuff.mario.framesRight[StaticStuff.mario.frame].ca, StaticStuff.mario.collisionbox.x, StaticStuff.mario.collisionbox.y);
 		   else
