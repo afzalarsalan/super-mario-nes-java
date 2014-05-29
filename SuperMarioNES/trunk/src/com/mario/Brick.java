@@ -43,25 +43,22 @@ public class Brick{
     }
     
     public boolean left(){
-    	return StaticStuff.mario.collisionbox.x+14 >= collisionbox.x && !top();
+    	return StaticStuff.mario.collisionbox.x+23 >= collisionbox.x;
     }
     
     public boolean right(){
-    	return StaticStuff.mario.collisionbox.x >= collisionbox.x+20 && !top();
+    	return StaticStuff.mario.collisionbox.x <= collisionbox.x+20;
     }
     
     public boolean steppedOff(){
-    	return StaticStuff.mario.collisionbox.x > collisionbox.x+25 || StaticStuff.mario.collisionbox.x+14 < collisionbox.x;
+    	return StaticStuff.mario.collisionbox.x > collisionbox.x+25 || StaticStuff.mario.collisionbox.x+23 < collisionbox.x;
     }
     
     public void update(){
     	collisionbox.setRect(x,y,20, 20);
-    	if(collides()){
-    		if(top()){
-    			StaticStuff.mario.y = y-30;
-    			StaticStuff.mario.hitFloor = true;
-    		}
-    	}
+    	//if(collides()){
+    		
+    	//}
   
     }
     

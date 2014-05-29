@@ -9,6 +9,7 @@ import javax.swing.Timer;
 
 public class Mushroom{
 
+	int frameDelay = 0;
 	Rectangle collisionbox = new Rectangle();
 	int width, height;
     int i=0,j=1;
@@ -17,11 +18,11 @@ public class Mushroom{
     int x,y;
     int walk=0;
     int curFrame = 0; //0-1
+    boolean dead = false;
     
     public Mushroom(){
     	//super(0,0);
     }
-   
      boolean yesorno=true;
      Mushroom(int x,int y)
      	{
@@ -31,6 +32,7 @@ public class Mushroom{
     	 	//to set the size
     	 	this.x=x;
     	 	this.y=y;
+    	 	collisionbox.setRect(x,y,20,20);
 
     	 	//setSize(800,800);
     //width=getWidth();
@@ -205,25 +207,42 @@ g.fillRect(x,y,30,8);
                                            // g2.scale(4, 4);
 }
 
-int dir = 2;
+int dir = 1;
+
+public boolean collides(Mario m){
+	return m.collisionbox.intersects(collisionbox);
+}
+
+public boolean collides(Bullet b){
+	return b.collisionbox.intersects(collisionbox);
+}
 
 public void update() {
-	if(x < 742)
+	if(!dead){
+		if(frameDelay > 9)
+			frameDelay = 0;
 		x+=dir;
-	if(x > 31)
-		x-=dir;
-	if(x > 742 || x < 31)
-		dir = -dir;
-		
-	collisionbox.setRect(x,y,20,30);
-	curFrame++;
+		if(x > 752 || x < 31)
+			dir = -dir;
+		if(collides(StaticStuff.mario))
+			StaticStuff.mario.hearts--;
+		for(Bullet b : GameFrame.bullets)
+			if(collides(b)){
+				dead = true;
+				b.dead = true;
+			}
+		collisionbox.setRect(x,y,20,20);
+		if(frameDelay == 1)
+		curFrame++;
+		frameDelay++;
+	}else
+		collisionbox.setRect(0,0,0,0);
 }
 
 public void draw(Graphics g){
-	if(curFrame == 0)
-		MushroomLeft(g);
-	else
-		MushroomRight(g);
+	if(!dead){
+			StaticStuff.mushim[curFrame%2].paint(g, StaticStuff.mushim[curFrame%2].ca, x, y);
+	}
 }
 
 }
