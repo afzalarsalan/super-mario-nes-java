@@ -225,11 +225,12 @@ public void update() {
 		if(x > 752 || x < 31)
 			dir = -dir;
 		if(collides(StaticStuff.mario))
-			StaticStuff.mario.hearts--;
+			StaticStuff.mario.dead = true;
 		for(Bullet b : GameFrame.bullets)
 			if(collides(b)){
 				dead = true;
 				b.dead = true;
+				GameFrame.score+=100;
 			}
 		collisionbox.setRect(x,y,20,20);
 		if(frameDelay == 1)
