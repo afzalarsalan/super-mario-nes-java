@@ -16,7 +16,7 @@ public class MainMenu {
     private TransparentButton buttonTransparentButton;
     private TransparentButton buttonTransparentButton1;
     private TransparentButton buttonTransparentButton2;
-    private Font marioFont;
+    static Font marioFont;
     public static JFrame frame;
 
     public static void main(String[] args) {

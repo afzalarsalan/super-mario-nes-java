@@ -2,6 +2,7 @@ package com.mario;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -29,6 +30,8 @@ public class GameFrame extends JPanel{
     ArrayList<Brick> level = new ArrayList();
     ArrayList<Mushroom> mushrooms = new ArrayList();
     static ArrayList<Bullet> bullets = new ArrayList();
+    
+    static int score = 0;
     
     public double GRAVITY = .6;
     public double TERMINAL = 20;
@@ -348,12 +351,10 @@ public class GameFrame extends JPanel{
 		   for(Bullet b : bullets)
 				b.draw(g);
 		   
-		//   if(StaticStuff.startSpin){
-			  // g.setColor(Color.BLACK);
-			   //g.fillRect(400,400,100,100);
-		 //  }
-		  // x,y, 20, 30
-		   //g.fillRect(StaticStuff.mario.collisionbox.x+3, StaticStuff.mario.collisionbox.y, 20, 32);
+		 //drawGUI
+		   g.setColor(Color.black);
+		   g.setFont(new Font("Times New Roman", Font.BOLD, 50));
+		   g.drawString("SCORE: " + score, 50, 50);
 	   }
 	   
 	   public void loadImgs(){
