@@ -37,6 +37,7 @@ public class GameFrame extends JPanel{
     public double TERMINAL = 20;
     public static double fallrate = 0;
     public static int DELAY = 1000/60;
+    public static boolean bossMode = false;
     
     public static boolean scrollmode = false;
     public static boolean jumped = false;
@@ -110,6 +111,11 @@ public class GameFrame extends JPanel{
     //Mushroom m = new Mushroom(500,513);
 	
 	public void update(){
+		if(bossMode){
+			mushrooms.clear();
+		}
+		
+		if(!bossMode)
 		nextSpawn++;
 		
 		if(nextSpawn > 500){
@@ -203,6 +209,10 @@ public class GameFrame extends JPanel{
 		for(Bullet b : bullets)
 		  if(b.x > -20 || b.x < 820)
 			  b.update();
+		if(bossMode)
+		boss.update();
+		
+		bossMode = score > 2000;
 	}
 
     public void stop(){
@@ -315,9 +325,12 @@ public class GameFrame extends JPanel{
 	   Cloud c3 = new Cloud(600, 120);
 	   Cloud c4 = new Cloud(250, 120);
 	   
+	   Boss boss = new Boss(60,400);
+	   
 	   @Override
 	   public void paintComponent(Graphics g){
 		   g.clearRect(0, 0, 800, 600);
+		   if(!StaticStuff.gameOver){
 		   g.setColor(new Color(150,164,227));
 		   g.fillRect(0, 0, 800, 600);
 		   c1.draw(g);
@@ -350,11 +363,28 @@ public class GameFrame extends JPanel{
 		   
 		   for(Bullet b : bullets)
 				b.draw(g);
+		   if(bossMode)
+		   boss.draw(g);
 		   
 		 //drawGUI
 		   g.setColor(Color.black);
 		   g.setFont(new Font("Times New Roman", Font.BOLD, 50));
 		   g.drawString("SCORE: " + score, 50, 50);
+		   if(bossMode)
+		   g.drawString("BOSS: " + boss.health, 380, 50);
+		   
+		   if(boss.health <= 0){
+			   g.setColor(Color.white);
+			   g.fillRect(0, 0, 800, 600);
+			   g.setColor(Color.black);
+			   g.setFont(new Font("Times New Roman", Font.BOLD, 50));
+		   g.drawString("YOU WON!", 200, 50);
+		   }
+			   
+		   }else{
+			   g.setFont(new Font("Times New Roman", Font.BOLD, 50));
+			   g.drawString("YOU DIED!", 200, 50);
+		   }
 	   }
 	   
 	   public void loadImgs(){
@@ -382,6 +412,9 @@ public class GameFrame extends JPanel{
 		        	//loadKey();
 		        	//();
 		        	// int x = (int)(Math.random()*720 + 30);
+		        	 StaticStuff.mario.loadImages();
+		  		   Music m = new Music("back1.wav");
+		  		   m.music();
 		        	 loadImgs();
 		        	 StaticStuff.powerups.add(new Star());
 		        	 StaticStuff.powerups.add(new MushroomPower());
@@ -418,9 +451,6 @@ public class GameFrame extends JPanel{
 	   /** The Entry main method */
 	   public static void main(String[] args) {
 	      // Run the GUI codes on the Event-Dispatching thread for thread safety
-		   StaticStuff.mario.loadImages();
-		   Music m = new Music("Sounds/back1.wav");
-		   m.music();
 	        new GameFrame().runGame();
 	   }
 
