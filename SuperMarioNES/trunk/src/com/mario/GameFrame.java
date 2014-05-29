@@ -27,7 +27,7 @@ public class GameFrame extends JPanel{
     public LevelBuilder lb;
     HashMap<String, Object> key = new HashMap();
     Object[][] lvlmap;
-    ArrayList<Brick> fallingBricks = new ArrayList();
+    static ArrayList<Powerup> powerups = new ArrayList();
     ArrayList<Brick> level = new ArrayList();
     ArrayList<Mushroom> mushrooms = new ArrayList();
     static ArrayList<Bullet> bullets = new ArrayList();
@@ -107,7 +107,7 @@ public class GameFrame extends JPanel{
     	//else if(ran == 1)
     	//	mushrooms.add(new Mushroom(740, 513));
     }
-    Peach p = new Peach(10,320);
+    Peach p = new Peach(600,500);
     
     //Mushroom m = new Mushroom(500,513);
 	
@@ -130,7 +130,7 @@ public class GameFrame extends JPanel{
 		if(!bossMode)
 		nextSpawn++;
 		
-		if(nextSpawn > 301){
+		if(nextSpawn > 401){
 			nextSpawn = 0;
 		}
 		
@@ -188,6 +188,8 @@ public class GameFrame extends JPanel{
 				StaticStuff.mario.frame++;
 			else
 				StaticStuff.mario.frame = 0;
+			
+			
 		}
 		
 		if(StaticStuff.mario.walking){
@@ -212,18 +214,18 @@ public class GameFrame extends JPanel{
 		StaticStuff.mario.frameDelay++;
 		
 		StaticStuff.mario.update();
-		for(Brick pb : level)
-			pb.update();
+		//for(Brick pb : level)
+		//	pb.update();
 		//for(Mushroom m : mushrooms){
 		//	m.update();
 		//}
 		for(Iterator<Mushroom> it = mushrooms.iterator(); it.hasNext();){
 			Mushroom temp = it.next();
 			if(Mushroomcollides(temp)){
-				it.remove();
+				temp.dead = true;
+				//it.remove();
 				GameFrame.score+=100;
 			}
-			else
 				temp.update();
 		}
 		for(Iterator<Bullet> it = bullets.iterator(); it.hasNext();){
@@ -233,15 +235,21 @@ public class GameFrame extends JPanel{
 			else
 				temp.update();
 		}
+		
+		for(Powerup p3 : powerups)
+			p3.update();
+		
+		//if(powerups.size() > 0)
+		//System.out.println(powerups);
 		//for(Bullet b : bullets)
 		 // if(b.x > -20 || b.x < 820)
 		//	  b.update();
 		if(bossMode)
 			boss.update();
+		p.update();
+		//System.out.println(mushrooms);
 		
-		System.out.println(mushrooms);
-		
-		bossMode = score > 2000;
+		bossMode = score > 4000;
 	}
 
     public void stop(){
@@ -387,13 +395,16 @@ public class GameFrame extends JPanel{
 			   //g.fillRect(m.collisionbox.x+6,m.collisionbox.y,14,30);
 		   }
 		   
-		   MushroomPower p = new MushroomPower();
-		   p.draw(g, 50, 50);
+		   //MushroomPower p = new MushroomPower();
+		   //p.draw(g, 50, 50);
 		   
 		   for(Bullet b : bullets)
 				b.draw(g);
 		   if(bossMode)
 			   boss.draw(g);
+		   
+		   for(Powerup p2 : powerups)
+			   p2.draw(g);
 		   
 		 //drawGUI
 		   g.setColor(Color.black);
@@ -413,8 +424,8 @@ public class GameFrame extends JPanel{
 		   }else{
 			   g.setFont(new Font("Times New Roman", Font.BOLD, 50));
 			   g.drawString("YOU DIED!", 200, 50);
-               StaticStuff.background.stop();
-               StaticStuff.death.play();
+               //StaticStuff.background.stop();
+               //StaticStuff.death.play();
 		   }
 	   }
 	   
@@ -444,10 +455,9 @@ public class GameFrame extends JPanel{
 		        	//();
 		        	// int x = (int)(Math.random()*720 + 30);
 		        	 StaticStuff.mario.loadImages();
-		  		   //Music m = new Music("back1.wav");
-		  		   //m.music();
+		  		   Music m = new Music("back1.wav");
+		  		   m.music();
 		        	 loadImgs();
-		        	 StaticStuff.powerups.add(new Star());
 		        	 StaticStuff.powerups.add(new MushroomPower());
 		        	 StaticStuff.powerups.add(new Coin());
 		            frame1 = new JFrame("Mario");

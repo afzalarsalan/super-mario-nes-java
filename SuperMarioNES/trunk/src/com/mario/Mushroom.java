@@ -217,6 +217,8 @@ public boolean collides(Bullet b){
 	return b.collisionbox.intersects(collisionbox);
 }
 
+boolean alreadyAdded = false;
+
 public void update() {
 	if(!dead){
 		if(frameDelay > 9)
@@ -240,6 +242,18 @@ public void update() {
 		curFrame++;
 		frameDelay++;
 	}else{
+		if(!alreadyAdded){
+		int ran = (int)(Math.random()*2);
+		if(ran == 0){
+			//System.out.println("added");
+			int ran2 = (int)(Math.random()*2);
+			if(ran2 == 0)
+				GameFrame.powerups.add(new Coin(x,y));
+			else if(ran2 == 1)
+				GameFrame.powerups.add(new MushroomPower(x,y));
+			alreadyAdded = true;
+		}
+		}
 		collisionbox.setRect(-50,-50,0,0);
 		x = -500;
 		y = -500;
