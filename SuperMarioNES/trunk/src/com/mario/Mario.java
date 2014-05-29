@@ -10,6 +10,10 @@ public class Mario {
 	ImageHelper marioSwitch = new ImageHelper();
 	ImageHelper marioStand = new ImageHelper();
 	ImageHelper marioJump = new ImageHelper();
+	
+	int hearts = 3;
+	int ammo = 30;
+	
 	int x,y;
 	int dir = 0; //0 is left 1 is right
 	int frame;
@@ -24,11 +28,13 @@ public class Mario {
 	
 	public Mario(int x1, int y1){
 		x = x1; y = y1;
-		collisionbox.setRect(x+6,y, 14, 30);
+		collisionbox.setRect(x,y, 20, 30);
 	}
 	
 	public void update(){
-		collisionbox.setRect(x+6,y, 14, 30);
+		if(hearts < 0)
+			StaticStuff.gameOver = true;
+		collisionbox.setRect(x,y, 20, 30);
 	}
 	
 	public void loadImages(){

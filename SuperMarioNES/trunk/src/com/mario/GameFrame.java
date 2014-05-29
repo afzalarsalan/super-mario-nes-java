@@ -28,6 +28,7 @@ public class GameFrame extends JPanel{
     ArrayList<Brick> fallingBricks = new ArrayList();
     ArrayList<Brick> level = new ArrayList();
     ArrayList<Mushroom> mushrooms = new ArrayList();
+    static ArrayList<Bullet> bullets = new ArrayList();
     
     public double GRAVITY = .6;
     public double TERMINAL = 20;
@@ -72,7 +73,7 @@ public class GameFrame extends JPanel{
                 }
             }
         };
-        loadLevel();
+       // loadLevel();
         animationThread.start();  // start the thread to run animation
     }
     
@@ -82,14 +83,37 @@ public class GameFrame extends JPanel{
     	level.add(new Brick(140, 510));
     	level.add(new Brick(160, 510));
     	level.add(new Brick(160, 490));
+    	level.add(new Brick(160, 470));
+    	level.add(new Brick(140, 490));
+    	
+    	level.add(new Brick(260, 490));
     	//level.add(new PowerBrick(125, 420));
     	//level.add(new PowerBrick(150, 420));
     }
     
     int cnt = 0;
-    int cnt2 = 0;
+    int nextSpawn = 0;
+    int spawnRate = 0;
+    
+    public void addMushroom(){
+    	int ran = (int)(Math.random()*2);
+    	if(ran == 0)
+    		mushrooms.add(new Mushroom(33, 513));
+    	else
+    		mushrooms.add(new Mushroom(740, 513));
+    }
+    
+    //Mushroom m = new Mushroom(500,513);
 	
 	public void update(){
+		nextSpawn++;
+		
+		if(nextSpawn > 500){
+			nextSpawn = spawnRate;
+			if(spawnRate < 450)
+				spawnRate++;
+		}
+	
 		//mario code
 		if(StaticStuff.startSpin){
 			Powerup p = StaticStuff.powerups.get((int)(Math.random() * 3));
@@ -103,13 +127,9 @@ public class GameFrame extends JPanel{
 			//cnt = 0;
 		//}
 		
-		//if(cnt2 == 500){
-		//	int side = (int)(Math.random()*2);
-		//	if(side == 0)
-		//		mushrooms.add(new Mushroom(50, 500));
-		//	else
-		//		mushrooms.add(new Mushroom(600, 500));
-		//}
+		if(nextSpawn == 500){
+			addMushroom();
+		}
 		
 		//cnt++;
 		//cnt2++;
@@ -136,8 +156,10 @@ public class GameFrame extends JPanel{
 				  StaticStuff.mario.y = 498;
 				  StaticStuff.mario.hitFloor = true;
 		  }
-			  if(StaticStuff.mario.hitFloor)
+			  if(StaticStuff.mario.hitFloor){
 				  jumped = false;
+				  //StaticStuff.jump.stop();
+			  }
 		
 		if(StaticStuff.mario.walking && StaticStuff.mario.frameDelay == 9){
 			if(StaticStuff.mario.frame < 2)
@@ -172,11 +194,16 @@ public class GameFrame extends JPanel{
 			pb.update();
 		for(Mushroom m : mushrooms)
 			m.update();
+		for(Bullet b : bullets)
+		  if(b.x > -20 || b.x < 820)
+			  b.update();
 	}
 
     public void stop(){
         isRunning = false;
     }
+    
+    static SoundEffect jump = new SoundEffect("Jump.wav");
 	
 	  static KeyListener listener = new KeyListener(){
 		   @Override
@@ -198,9 +225,18 @@ public class GameFrame extends JPanel{
 					StaticStuff.mario.frame++;
 				}
 				if(e.getKeyCode() == KeyEvent.VK_SPACE && !jumped){
+					jump =new SoundEffect("Jump.wav");
+					jump.play();
 					StaticStuff.mario.hitFloor = false;
 					jumped = true;
-					fallrate = -12;
+		 			fallrate = -12;
+				}
+				if(e.getKeyCode() == KeyEvent.VK_S){
+					//StaticStuff.mario.ammo--;
+					if(StaticStuff.mario.ammo > 0)
+						bullets.add(new Bullet(StaticStuff.mario.dir));
+					if(StaticStuff.mario.ammo < 0)
+						StaticStuff.mario.ammo = 0;
 				}
 			}
 
@@ -230,7 +266,7 @@ public class GameFrame extends JPanel{
 	   
 	   public void drawLevel(Graphics g){
 		   //floor
-		   //g2 = (Graphics2D)g;
+		   g2 = (Graphics2D)g;
 		  // g2.scale(0.2,0.2);
 		   Brick b = new Brick();
 		   b.y = 530;
@@ -263,15 +299,25 @@ public class GameFrame extends JPanel{
 			   }
 		   }
 		 //  g2.scale(5, 5);
-		   //g2.scale(.5, .5);
-		  // g1.GreenPipe(g);
-		  // g3.GreenPipe(g);
-		  // g2.scale(2,2);
+		   g2.scale(.5, .5);
+		   g1.GreenPipe(g);
+		   g3.GreenPipe(g);
+		   g2.scale(2,2);
 	   }
+	   Cloud c1 = new Cloud(100,50);
+	   Cloud c2 = new Cloud(400, 50);
+	   Cloud c3 = new Cloud(600, 120);
+	   Cloud c4 = new Cloud(250, 120);
 	   
 	   @Override
 	   public void paintComponent(Graphics g){
 		   g.clearRect(0, 0, 800, 600);
+		   g.setColor(new Color(150,164,227));
+		   g.fillRect(0, 0, 800, 600);
+		   c1.draw(g);
+		   c2.draw(g);
+		   c3.draw(g);
+		   c4.draw(g);
 		   if(StaticStuff.mario.dir == 1)
 			   StaticStuff.mario.framesRight[StaticStuff.mario.frame].paint(g, StaticStuff.mario.framesRight[StaticStuff.mario.frame].ca, StaticStuff.mario.collisionbox.x, StaticStuff.mario.collisionbox.y);
 		   else
@@ -289,23 +335,38 @@ public class GameFrame extends JPanel{
 		   }
 		   for(Mushroom m : mushrooms){
 			   m.draw(g);
-			   g.fillRect(m.collisionbox.x+6,m.collisionbox.y,14,30);
+			   //g.fillRect(m.collisionbox.x+6,m.collisionbox.y,14,30);
 		   }
 		   
 		   MushroomPower p = new MushroomPower();
 		   p.draw(g, 50, 50);
 		   
+		   for(Bullet b : bullets)
+				b.draw(g);
+		   
 		//   if(StaticStuff.startSpin){
 			  // g.setColor(Color.BLACK);
 			   //g.fillRect(400,400,100,100);
 		 //  }
-		   
-		   //g.fillRect(StaticStuff.mario.collisionbox.x+6, StaticStuff.mario.collisionbox.y, 14, 30);
+		  // x,y, 20, 30
+		   //g.fillRect(StaticStuff.mario.collisionbox.x+3, StaticStuff.mario.collisionbox.y, 20, 32);
 	   }
 	   
 	   public void loadImgs(){
 		   	 StaticStuff.brickim.setDim(11, 11, 2);
 		   	 StaticStuff.brickim.parse("(0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (105:61:26), (105:61:26), (105:61:26), (0:0:0), (105:61:26), (105:61:26), (105:61:26), (105:61:26), (105:61:26), (0:0:0), (0:0:0), (105:61:26), (105:61:26), (105:61:26), (0:0:0), (105:61:26), (105:61:26), (105:61:26), (105:61:26), (105:61:26), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (105:61:26), (0:0:0), (105:61:26), (105:61:26), (105:61:26), (105:61:26), (0:0:0), (105:61:26), (105:61:26), (0:0:0), (0:0:0), (105:61:26), (0:0:0), (105:61:26), (105:61:26), (105:61:26), (105:61:26), (0:0:0), (105:61:26), (105:61:26), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (105:61:26), (105:61:26), (105:61:26), (105:61:26), (0:0:0), (105:61:26), (105:61:26), (105:61:26), (105:61:26), (0:0:0), (0:0:0), (105:61:26), (105:61:26), (105:61:26), (105:61:26), (0:0:0), (105:61:26), (105:61:26), (105:61:26), (105:61:26), (0:0:0), (0:0:0), (105:61:26), (105:61:26), (105:61:26), (105:61:26), (0:0:0), (105:61:26), (105:61:26), (105:61:26), (105:61:26), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0)");
+		   	 StaticStuff.bulletim.setDim(10, 10, 1);
+		   	 StaticStuff.bulletim.parse("null, null, (255:255:0), (222:149:22), (255:0:0), (255:0:0), (222:149:22), (255:255:0), null, null, null, (255:255:0), (222:149:22), (255:0:0), (255:255:0), (255:255:0), (255:0:0), (222:149:22), (255:255:0), null, (255:255:0), (222:149:22), (255:0:0), (255:255:0), (222:149:22), (222:149:22), (255:255:0), (255:0:0), (222:149:22), (255:255:0), (222:149:22), (255:0:0), (255:255:0), (222:149:22), (222:149:22), (222:149:22), (222:149:22), (255:255:0), (255:0:0), (222:149:22), (255:0:0), (255:255:0), (222:149:22), (255:255:0), (255:0:0), (255:0:0), (255:255:0), (222:149:22), (255:255:0), (255:0:0), (255:0:0), (255:255:0), (222:149:22), (255:255:0), (255:0:0), (255:0:0), (255:255:0), (222:149:22), (255:255:0), (255:0:0), (222:149:22), (255:0:0), (255:255:0), (222:149:22), (222:149:22), (222:149:22), (222:149:22), (255:255:0), (255:0:0), (222:149:22), (255:255:0), (222:149:22), (255:0:0), (255:255:0), (222:149:22), (222:149:22), (255:255:0), (255:0:0), (222:149:22), (255:255:0), null, (255:255:0), (222:149:22), (255:0:0), (255:255:0), (255:255:0), (255:0:0), (222:149:22), (255:255:0), null, null, null, (255:255:0), (222:149:22), (255:0:0), (255:0:0), (222:149:22), (255:255:0), null, null");
+		   	 
+		   	 ImageHelper frame1 = new ImageHelper();
+		   	 ImageHelper frame2 = new ImageHelper();
+		   	 
+		   	 frame1.setDim(25,25,1);
+		   	 frame1.parse("null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, (255:138:0), (255:138:0), (255:138:0), (255:138:0), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, (255:138:0), (255:138:0), (255:138:0), (255:138:0), (255:138:0), (255:138:0), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, (255:138:0), (255:138:0), (255:138:0), (255:138:0), (255:138:0), (255:138:0), (255:138:0), (255:138:0), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, (255:138:0), (255:138:0), (255:138:0), (255:138:0), (255:138:0), (255:138:0), (255:138:0), (255:138:0), (255:138:0), (255:138:0), null, null, null, null, null, null, null, null, null, null, null, null, null, null, (255:138:0), (0:0:0), (0:0:0), (255:138:0), (255:138:0), (255:138:0), (255:138:0), (255:138:0), (255:138:0), (0:0:0), (0:0:0), (255:138:0), null, null, null, null, null, null, null, null, null, null, null, null, (255:138:0), (255:138:0), (255:138:0), (255:255:255), (0:0:0), (255:138:0), (255:138:0), (255:138:0), (255:138:0), (0:0:0), (255:255:255), (255:138:0), (255:138:0), (255:138:0), null, null, null, null, null, null, null, null, null, null, null, (255:138:0), (255:138:0), (255:138:0), (255:255:255), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (255:255:255), (255:138:0), (255:138:0), (255:138:0), null, null, null, null, null, null, null, null, null, null, (255:138:0), (255:138:0), (255:138:0), (255:138:0), (255:255:255), (0:0:0), (255:255:255), (255:138:0), (255:138:0), (255:255:255), (0:0:0), (255:255:255), (255:138:0), (255:138:0), (255:138:0), (255:138:0), null, null, null, null, null, null, null, null, null, (255:138:0), (255:138:0), (255:138:0), (255:138:0), (255:255:255), (255:255:255), (255:255:255), (255:138:0), (255:138:0), (255:255:255), (255:255:255), (255:255:255), (255:138:0), (255:138:0), (255:138:0), (255:138:0), null, null, null, null, null, null, null, null, null, (255:138:0), (255:138:0), (255:138:0), (255:138:0), (255:138:0), (255:138:0), (255:138:0), (255:138:0), (255:138:0), (255:138:0), (255:138:0), (255:138:0), (255:138:0), (255:138:0), (255:138:0), (255:138:0), null, null, null, null, null, null, null, null, null, null, (255:138:0), (255:138:0), (255:138:0), (255:138:0), (255:187:128), (255:187:128), (255:187:128), (255:187:128), (255:187:128), (255:187:128), (255:138:0), (255:138:0), (255:138:0), (255:138:0), null, null, null, null, null, null, null, null, null, null, null, null, null, null, (255:187:128), (255:187:128), (255:187:128), (255:187:128), (255:187:128), (255:187:128), (255:187:128), (255:187:128), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, (255:187:128), (255:187:128), (255:187:128), (255:187:128), (255:187:128), (255:187:128), (255:187:128), (255:187:128), (0:0:0), (0:0:0), null, null, null, null, null, null, null, null, null, null, null, null, null, null, (0:0:0), (0:0:0), (255:187:128), (255:187:128), (255:187:128), (255:187:128), (255:187:128), (255:187:128), (0:0:0), (0:0:0), (0:0:0), (0:0:0), null, null, null, null, null, null, null, null, null, null, null, null, null, (0:0:0), (0:0:0), (0:0:0), (255:187:128), (255:187:128), (255:187:128), (255:187:128), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), null, null, null, null, null, null, null, null, null, null, null, null, null, null, (0:0:0), (0:0:0), (0:0:0), (255:187:128), null, (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null");
+		   	 frame2.setDim(20, 20, 1);
+		   	 frame2.parse("null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, (247:139:4), (247:139:4), (247:139:4), (247:139:4), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, (247:139:4), (247:139:4), (247:139:4), (247:139:4), (247:139:4), (247:139:4), null, null, null, null, null, null, null, null, null, null, null, null, null, (247:139:4), (247:139:4), (247:139:4), (247:139:4), (247:139:4), (247:139:4), (247:139:4), (247:139:4), null, null, null, null, null, null, null, null, null, null, null, (247:139:4), (247:139:4), (247:139:4), (247:139:4), (247:139:4), (247:139:4), (247:139:4), (247:139:4), (247:139:4), (247:139:4), null, null, null, null, null, null, null, null, null, (247:139:4), (0:0:0), (0:0:0), (247:139:4), (247:139:4), (247:139:4), (247:139:4), (247:139:4), (247:139:4), (0:0:0), (0:0:0), (247:139:4), null, null, null, null, null, null, null, (247:139:4), (247:139:4), (247:139:4), null, (0:0:0), (247:139:4), (247:139:4), (247:139:4), (247:139:4), (0:0:0), null, (247:139:4), (247:139:4), (247:139:4), null, null, null, null, null, null, (247:139:4), (247:139:4), (247:139:4), null, (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), null, (247:139:4), (247:139:4), (247:139:4), null, null, null, null, null, null, (247:139:4), (247:139:4), (247:139:4), null, (0:0:0), null, (247:139:4), (247:139:4), null, (0:0:0), null, (247:139:4), (247:139:4), (247:139:4), null, null, null, null, null, null, (247:139:4), (247:139:4), (247:139:4), null, null, null, (247:139:4), (247:139:4), null, null, null, (247:139:4), (247:139:4), (247:139:4), null, null, null, null, null, null, (247:139:4), (247:139:4), (247:139:4), (247:139:4), (247:139:4), (247:139:4), (247:139:4), (247:139:4), (247:139:4), (247:139:4), (247:139:4), (247:139:4), (247:139:4), (247:139:4), null, null, null, null, null, null, (247:139:4), (247:139:4), (247:139:4), (247:139:4), (238:195:143), (238:195:143), (238:195:143), (238:195:143), (238:195:143), (238:195:143), (247:139:4), (247:139:4), (247:139:4), (247:139:4), null, null, null, null, null, null, null, null, null, (238:195:143), (238:195:143), (238:195:143), (238:195:143), (238:195:143), (238:195:143), (238:195:143), (238:195:143), null, null, null, null, null, null, null, null, null, null, (0:0:0), (0:0:0), (238:195:143), (238:195:143), (238:195:143), (238:195:143), (238:195:143), (238:195:143), (238:195:143), (238:195:143), null, null, null, null, null, null, null, null, null, (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (238:195:143), (238:195:143), (238:195:143), (238:195:143), (238:195:143), (0:0:0), (0:0:0), null, null, null, null, null, null, null, null, (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (238:195:143), (238:195:143), (238:195:143), (0:0:0), (0:0:0), (0:0:0), null, null, null, null, null, null, null, null, null, (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (0:0:0), (238:195:143), (0:0:0), (0:0:0), (0:0:0), null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null");
+		   	 StaticStuff.mushim[0] = frame1;
+		   	 StaticStuff.mushim[1] = frame2;
 	   }
 	   
 	   public void runGame(){
@@ -353,6 +414,8 @@ public class GameFrame extends JPanel{
 	   public static void main(String[] args) {
 	      // Run the GUI codes on the Event-Dispatching thread for thread safety
 		   StaticStuff.mario.loadImages();
+		   Music m = new Music("Sounds/back1.wav");
+		   m.music();
 	        new GameFrame().runGame();
 	   }
 
