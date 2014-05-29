@@ -36,7 +36,7 @@ public class Music {
 
 	        try
 	        {
-	            InputStream test = getClass().getResourceAsStream("/com/mario/back1.wav");
+	            InputStream test = getClass().getResourceAsStream("/com/mario/" + mus);
 	            AudioInputStream ais = AudioSystem.getAudioInputStream(test);
 	            
 	            c = AudioSystem.getClip();

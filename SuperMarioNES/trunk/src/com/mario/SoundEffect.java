@@ -14,7 +14,7 @@ public class SoundEffect {
 	
 	public SoundEffect(String file){
 		this.file = file;
-		InputStream test = getClass().getResourceAsStream("/com/mario/"+file);
+		InputStream test = getClass().getResourceAsStream("/com/mario/sound/"+file);
 		try {
 			as = new AudioStream(test);
 		} catch (IOException e) {
