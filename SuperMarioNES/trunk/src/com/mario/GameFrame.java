@@ -413,6 +413,8 @@ public class GameFrame extends JPanel{
 		   }else{
 			   g.setFont(new Font("Times New Roman", Font.BOLD, 50));
 			   g.drawString("YOU DIED!", 200, 50);
+               StaticStuff.background.stop();
+               StaticStuff.death.play();
 		   }
 	   }
 	   
@@ -468,6 +470,7 @@ public class GameFrame extends JPanel{
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
+                            StaticStuff.background.stop();
                             frame1.dispose();
                             super.windowClosed(windowEvent);
                         }
