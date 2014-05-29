@@ -14,6 +14,7 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import javax.swing.*;
 
@@ -100,16 +101,27 @@ public class GameFrame extends JPanel{
     int spawnRate = 0;
     
     public void addMushroom(){
-    	int ran = (int)(Math.random()*2);
-    	if(ran == 0)
+    	//int ran = (int)(Math.random()*2);
+    	//if(ran == 0)
     		mushrooms.add(new Mushroom(33, 513));
-    	else
-    		mushrooms.add(new Mushroom(740, 513));
+    	//else if(ran == 1)
+    	//	mushrooms.add(new Mushroom(740, 513));
     }
     Peach p = new Peach(10,320);
     
     //Mushroom m = new Mushroom(500,513);
 	
+    
+    public boolean Mushroomcollides(Mushroom m){
+    	for(Bullet b : bullets){
+    		if(b.collisionbox.intersects(m.collisionbox)){
+    			b.dead = true;
+    			return true;
+    		}
+    	}
+		return false;
+    }
+    
 	public void update(){
 		if(bossMode){
 			mushrooms.clear();
@@ -118,10 +130,8 @@ public class GameFrame extends JPanel{
 		if(!bossMode)
 		nextSpawn++;
 		
-		if(nextSpawn > 500){
-			nextSpawn = spawnRate;
-			if(spawnRate < 450)
-				spawnRate++;
+		if(nextSpawn > 301){
+			nextSpawn = 0;
 		}
 		
 		
@@ -139,7 +149,7 @@ public class GameFrame extends JPanel{
 			//cnt = 0;
 		//}
 		
-		if(nextSpawn == 500){
+		if(nextSpawn == 200){
 			addMushroom();
 		}
 		
@@ -204,13 +214,32 @@ public class GameFrame extends JPanel{
 		StaticStuff.mario.update();
 		for(Brick pb : level)
 			pb.update();
-		for(Mushroom m : mushrooms)
-			m.update();
-		for(Bullet b : bullets)
-		  if(b.x > -20 || b.x < 820)
-			  b.update();
+		//for(Mushroom m : mushrooms){
+		//	m.update();
+		//}
+		for(Iterator<Mushroom> it = mushrooms.iterator(); it.hasNext();){
+			Mushroom temp = it.next();
+			if(Mushroomcollides(temp)){
+				it.remove();
+				GameFrame.score+=100;
+			}
+			else
+				temp.update();
+		}
+		for(Iterator<Bullet> it = bullets.iterator(); it.hasNext();){
+			Bullet temp = it.next();
+			if(temp.x < -20 || temp.x > 820)
+				it.remove();
+			else
+				temp.update();
+		}
+		//for(Bullet b : bullets)
+		 // if(b.x > -20 || b.x < 820)
+		//	  b.update();
 		if(bossMode)
-		boss.update();
+			boss.update();
+		
+		System.out.println(mushrooms);
 		
 		bossMode = score > 2000;
 	}
@@ -364,7 +393,7 @@ public class GameFrame extends JPanel{
 		   for(Bullet b : bullets)
 				b.draw(g);
 		   if(bossMode)
-		   boss.draw(g);
+			   boss.draw(g);
 		   
 		 //drawGUI
 		   g.setColor(Color.black);

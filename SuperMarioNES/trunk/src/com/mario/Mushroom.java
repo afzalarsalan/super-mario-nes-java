@@ -225,22 +225,25 @@ public void update() {
 		if(x > 752 || x < 31)
 			dir = -dir;
 		if(collides(StaticStuff.mario)){
+			System.out.println("Mush/Mario");
 			StaticStuff.gameOver = true;
 			//StaticStuff.mario.dead = true;
 		}
-		for(Bullet b : GameFrame.bullets)
-			if(collides(b)){
-				dead = true;
-				dead = true;
-				b.dead = true;
-				GameFrame.score+=100;
-			}
+		//for(Bullet b : GameFrame.bullets)
+		//	if(collides(b)){
+		//		dead = true;
+		//		b.dead = true;
+		//		GameFrame.score+=100;
+		//	}
 		collisionbox.setRect(x,y,20,20);
 		if(frameDelay == 1)
 		curFrame++;
 		frameDelay++;
-	}else
+	}else{
 		collisionbox.setRect(-50,-50,0,0);
+		x = -500;
+		y = -500;
+	}
 }
 
 public void draw(Graphics g){
