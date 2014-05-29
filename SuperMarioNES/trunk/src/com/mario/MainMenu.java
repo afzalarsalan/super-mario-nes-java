@@ -48,8 +48,9 @@ public class MainMenu {
             public void mouseClicked(MouseEvent mouseEvent) {
                 StaticStuff.mario.loadImages();
                 GameFrame gameFrame = new GameFrame();
-                Music m = new Music("sound/back1.wav");
-                m.music();
+                //Music m = new Music("sound/back1.wav");
+                StaticStuff.background = new Music("back1.wav");
+                StaticStuff.background.music();
                 gameFrame.runGame();
                 frame.setVisible(false);
             }

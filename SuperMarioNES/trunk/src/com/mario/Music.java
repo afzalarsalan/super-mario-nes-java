@@ -18,6 +18,10 @@ import sun.audio.AudioStream;
 import sun.audio.ContinuousAudioDataStream;
 
 public class Music {
+    AudioPlayer MGP = AudioPlayer.player;
+    AudioStream BGM;
+    AudioData MD;
+    Clip c;
 	
 	String mus = "";
 
@@ -27,10 +31,7 @@ public class Music {
 	
 	 public void music() 
 	    {       
-	        AudioPlayer MGP = AudioPlayer.player;
-	        AudioStream BGM;
-	        AudioData MD;
-	        Clip c;
+
 
 	        ContinuousAudioDataStream loop = null;
 
@@ -64,4 +65,8 @@ public class Music {
 			}
 	        MGP.start(loop);
 	    }
+    public void stop(){
+        c.stop();
+        c.close();
+    }
 }
