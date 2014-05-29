@@ -22,5 +22,6 @@ public class StaticStuff {
 
     public static int lives = 3;
 
-    public static Music background = new Music("sound/back1.wav");
+    public static Music background = new Music("back1.wav");
+    public static SoundEffect death = new SoundEffect("Death.wav");
 }
