@@ -6,7 +6,7 @@ public class StaticStuff {
 
 	public static int CANVAS_WIDTH = 800;
 	public static int CANVAS_HEIGHT = 600;
-	public static Mario mario = new Mario(40,478);
+	public static Mario mario = new Mario(300,478);
 	public static boolean startSpin = false;
 	public static ArrayList<Powerup> powerups = new ArrayList();
 	public static boolean gameOver = false;
@@ -19,4 +19,8 @@ public class StaticStuff {
 	public static SoundEffect sf = new SoundEffect("Fireball.wav");
 	
 	public static SoundEffect jump = new SoundEffect("Jump.wav");
+
+    public static int lives = 3;
+
+    public static Music background = new Music("sound/back1.wav");
 }

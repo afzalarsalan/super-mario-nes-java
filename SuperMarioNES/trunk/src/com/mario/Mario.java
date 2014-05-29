@@ -11,7 +11,7 @@ public class Mario {
 	ImageHelper marioStand = new ImageHelper();
 	ImageHelper marioJump = new ImageHelper();
 	
-	int hearts = 3;
+	int hearts = StaticStuff.lives;
 	int ammo = 30;
 	
 	int x,y;
@@ -32,7 +32,7 @@ public class Mario {
 	}
 	
 	public void update(){
-		if(hearts < 0)
+		if(StaticStuff.lives < 0)
 			StaticStuff.gameOver = true;
 		collisionbox.setRect(x,y, 20, 30);
 	}

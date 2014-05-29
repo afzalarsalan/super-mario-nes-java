@@ -442,8 +442,8 @@ public class GameFrame extends JPanel{
 		        	//();
 		        	// int x = (int)(Math.random()*720 + 30);
 		        	 StaticStuff.mario.loadImages();
-		  		   Music m = new Music("back1.wav");
-		  		   m.music();
+		  		   //Music m = new Music("back1.wav");
+		  		   //m.music();
 		        	 loadImgs();
 		        	 StaticStuff.powerups.add(new Star());
 		        	 StaticStuff.powerups.add(new MushroomPower());
@@ -461,6 +461,7 @@ public class GameFrame extends JPanel{
                         public void windowClosing(WindowEvent windowEvent) {
                             animationThread.interrupt();
                             MainMenu.setVisible(true);
+                            StaticStuff.background.stop();
                             isRunning = false;
                             try {
                                 animationThread.join();
