@@ -36,7 +36,7 @@ public class Boss {
 			}
 		if(collides(StaticStuff.mario)){
 			StaticStuff.gameOver = true;
-			StaticStuff.mario.dead = true;
+			//StaticStuff.mario.dead = true;
 		}
 		if(health <= 0)
 			dead = true;
