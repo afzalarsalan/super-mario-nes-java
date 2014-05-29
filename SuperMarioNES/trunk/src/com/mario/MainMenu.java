@@ -57,6 +57,8 @@ public class MainMenu {
             public void mouseClicked(MouseEvent mouseEvent) {
                 HelpMenu dialog = new HelpMenu();
                 dialog.pack();
+                dialog.setSize(400,200);
+                dialog.setLocationRelativeTo(null);
                 dialog.setVisible(true);
                 super.mouseClicked(mouseEvent);
             }
