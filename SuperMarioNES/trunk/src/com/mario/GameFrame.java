@@ -65,8 +65,8 @@ public class GameFrame extends JPanel{
                             repaint();
                             frames++;
                         }
-                        //repaint();
-                        //frames++;
+                        repaint();
+                        frames++;
                         if(System.currentTimeMillis() - timer > 1000) {
                             timer += 1000;
                             //System.out.println(updates + "ups, " + frames + " fps");
@@ -228,22 +228,22 @@ public class GameFrame extends JPanel{
 			}
 				temp.update();
 		}
-		for(Iterator<Bullet> it = bullets.iterator(); it.hasNext();){
+		/*for(Iterator<Bullet> it = bullets.iterator(); it.hasNext();){
 			Bullet temp = it.next();
 			if(temp.x < -20 || temp.x > 820)
 				it.remove();
 			else
 				temp.update();
 		}
-		
+*/
 		for(Powerup p3 : powerups)
 			p3.update();
 		
 		//if(powerups.size() > 0)
 		//System.out.println(powerups);
-		//for(Bullet b : bullets)
-		 // if(b.x > -20 || b.x < 820)
-		//	  b.update();
+		for(Bullet b : bullets)
+		  if(b.x > -20 || b.x < 820)
+			  b.update();
 		if(bossMode)
 			boss.update();
 		p.update();
@@ -424,8 +424,8 @@ public class GameFrame extends JPanel{
 		   }else{
 			   g.setFont(new Font("Times New Roman", Font.BOLD, 50));
 			   g.drawString("YOU DIED!", 200, 50);
-               //StaticStuff.background.stop();
-               //StaticStuff.death.play();
+               StaticStuff.background.stop();
+               StaticStuff.death.play();
 		   }
 	   }
 	   
@@ -455,8 +455,9 @@ public class GameFrame extends JPanel{
 		        	//();
 		        	// int x = (int)(Math.random()*720 + 30);
 		        	 StaticStuff.mario.loadImages();
-		  		   Music m = new Music("back1.wav");
-		  		   m.music();
+		  		   //Music m = new Music("back1.wav");
+		  		   //m.music();
+                     //StaticStuff.background.music();
 		        	 loadImgs();
 		        	 StaticStuff.powerups.add(new MushroomPower());
 		        	 StaticStuff.powerups.add(new Coin());
